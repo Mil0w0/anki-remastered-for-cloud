@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:cov": "jest --coverage",
     "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@nestjs/testing": "^11.0.7"
+    "@nestjs/testing": "^11.0.7",
+    "@types/jest": "^29.5.14"
   }
 }
