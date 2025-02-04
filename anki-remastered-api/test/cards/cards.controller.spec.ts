@@ -37,4 +37,20 @@ describe('CardController', () => {
       }));
     });
   });
+
+  describe('getCardById', () => {
+    it('should return an exisiting card with it informations', async () => {
+
+      const createCardDto = new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      const expectedResult = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      (cardRepository.save as jest.Mock).mockResolvedValue(expectedResult);
+      const createdCard = await cardController.createCard(createCardDto);
+      expectedResult.id = createdCard.id;
+
+      (cardRepository.findById as jest.Mock).mockResolvedValue(expectedResult);
+      await cardController.getCardById(createdCard.id).toEqual(expectedResult);
+
+      expect(cardRepository.findById).toHaveBeenCalledWith(createdCard.id);
+    });
+  });
 });
