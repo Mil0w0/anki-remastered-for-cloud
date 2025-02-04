@@ -10,7 +10,7 @@ describe('CardController', () => {
   let cardRepository: jest.Mocked<CardRepository>;
 
   beforeEach(() => {
-    cardRepository = { save: jest.fn(), findById: jest.fn() };
+    cardRepository = { save: jest.fn(), findById: jest.fn(), findAll: jest.fn() };
     cardService = new CardService(cardRepository);
     cardController = new CardController(cardService);
   });
@@ -61,6 +61,17 @@ describe('CardController', () => {
 
       (cardRepository.findById as jest.Mock).mockResolvedValue(undefined);
       expect(cardController.getCardById(createdCard.id)).rejects.toThrow('Card with id ' + createdCard.id + ' not found');
+    });
+  });
+  describe('getAllCards', () => {
+    it('should return all created cards', async () => {
+      await cardController.createCard(new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming"));
+      await cardController.createCard(new CreateCardDto("Who is the best Pokemon", "It's FARFETCH'D !", "Gaming"));
+
+      const cards = await cardController.getAllCards();
+      expect(cards).toHaveLength(2);
+
+      expect(cardRepository.findAll).toHaveBeenCalled();
     });
   });
 });
