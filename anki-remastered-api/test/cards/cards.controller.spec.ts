@@ -76,5 +76,15 @@ describe('CardController', () => {
 
       expect(cardRepository.findAll).toHaveBeenCalled();
     });
+    it('should return the cards with a specific tag', async () => {
+      const expectedResult1 = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      const expectedResult2 = new Card("2", "FIRST", "What is the moon made of ?", "Lotta Cheese", "Astrology");
+
+      (cardRepository.findAll as jest.Mock).mockResolvedValue([expectedResult1, expectedResult2]);
+      const cards = await cardController.getAllCards("Gaming");
+      expect(cards).toHaveLength(1);
+      expect(cards).toEqual([expectedResult1]);
+
+      expect(cardRepository.findAll).toHaveBeenCalled
   });
 });
