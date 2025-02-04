@@ -20,4 +20,9 @@ export class CardController {
     }
     return card;
   }
+
+  @Get()
+  async getAllCards(): Promise<Card[]> {
+    return this.cardService.getAllCards();
+  }
 }

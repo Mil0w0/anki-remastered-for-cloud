@@ -10,6 +10,7 @@ describe('CardController', () => {
   let cardRepository: jest.Mocked<CardRepository>;
 
   beforeEach(() => {
+    jest.clearAllMocks();
     cardRepository = { save: jest.fn(), findById: jest.fn(), findAll: jest.fn() };
     cardService = new CardService(cardRepository);
     cardController = new CardController(cardService);
@@ -40,36 +41,30 @@ describe('CardController', () => {
 
   describe('getCardById', () => {
     it('should return an exisiting card with it informations', async () => {
-
-      const createCardDto = new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
       const expectedResult = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
-      (cardRepository.save as jest.Mock).mockResolvedValue(expectedResult);
-      const createdCard = await cardController.createCard(createCardDto);
-      expectedResult.id = createdCard.id;
 
       (cardRepository.findById as jest.Mock).mockResolvedValue(expectedResult);
-      const cardById = await cardController.getCardById(createdCard.id);
+      const cardById = await cardController.getCardById(expectedResult.id);
       expect(cardById).toEqual(expectedResult);
 
-      expect(cardRepository.findById).toHaveBeenCalledWith(createdCard.id);
+      expect(cardRepository.findById).toHaveBeenCalledWith(expectedResult.id);
     });
     it('should throw an error if the card does not exist', async () => {
-      const createCardDto = new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
       const expectedResult = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
-      (cardRepository.save as jest.Mock).mockResolvedValue(expectedResult);
-      const createdCard = await cardController.createCard(createCardDto);
 
       (cardRepository.findById as jest.Mock).mockResolvedValue(undefined);
-      expect(cardController.getCardById(createdCard.id)).rejects.toThrow('Card with id ' + createdCard.id + ' not found');
+      expect(cardController.getCardById(expectedResult.id)).rejects.toThrow('Card with id ' + expectedResult.id + ' not found');
     });
   });
   describe('getAllCards', () => {
     it('should return all created cards', async () => {
-      await cardController.createCard(new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming"));
-      await cardController.createCard(new CreateCardDto("Who is the best Pokemon", "It's FARFETCH'D !", "Gaming"));
+      const expectedResult1 = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      const expectedResult2 = new Card("2", "FIRST", "Who is the best Pokemon", "It's FARFETCH'D !", "Gaming");
 
+      (cardRepository.findAll as jest.Mock).mockResolvedValue([expectedResult1, expectedResult2]);
       const cards = await cardController.getAllCards();
       expect(cards).toHaveLength(2);
+      expect(cards).toEqual([expectedResult1, expectedResult2]);
 
       expect(cardRepository.findAll).toHaveBeenCalled();
     });

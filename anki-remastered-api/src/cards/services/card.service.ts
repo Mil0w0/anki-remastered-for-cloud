@@ -17,4 +17,8 @@ export class CardService {
   async getCardById(id: string): Promise<Card|undefined> {
     return this.cardRepository.findById(id);
   }
+
+  async getAllCards(): Promise<Card[]> {
+    return this.cardRepository.findAll();
+  }
 }

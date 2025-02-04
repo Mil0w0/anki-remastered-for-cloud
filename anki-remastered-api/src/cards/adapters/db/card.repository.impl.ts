@@ -13,4 +13,8 @@ export class CardRepositoryImpl implements CardRepository {
   async findById(id: string): Promise<Card|undefined> {
     return this.cards.get(id);
   }
+
+  async findAll(): Promise<Card[]> {
+    return Array.from(this.cards.values());
+  }
 }
