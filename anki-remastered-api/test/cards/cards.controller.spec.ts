@@ -86,5 +86,6 @@ describe('CardController', () => {
       expect(cards).toEqual([expectedResult1]);
 
       expect(cardRepository.findAll).toHaveBeenCalled
+    });
   });
 });

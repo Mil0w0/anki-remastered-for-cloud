@@ -18,7 +18,11 @@ export class CardService {
     return this.cardRepository.findById(id);
   }
 
-  async getAllCards(): Promise<Card[]> {
-    return this.cardRepository.findAll();
+  async getAllCards(tag?: string): Promise<Card[]> {
+    const cards = this.cardRepository.findAll();
+    if (tag) {
+      return cards.then(cards => cards.filter(card => card.tag === tag));
+    }
+    return cards;
   }
 }
