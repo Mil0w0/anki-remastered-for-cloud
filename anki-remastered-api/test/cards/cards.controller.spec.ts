@@ -53,5 +53,14 @@ describe('CardController', () => {
 
       expect(cardRepository.findById).toHaveBeenCalledWith(createdCard.id);
     });
+    it('should throw an error if the card does not exist', async () => {
+      const createCardDto = new CreateCardDto("Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      const expectedResult = new Card("1", "FIRST", "Who is that Pokemon ?", "It's PIKACHU !", "Gaming");
+      (cardRepository.save as jest.Mock).mockResolvedValue(expectedResult);
+      const createdCard = await cardController.createCard(createCardDto);
+
+      (cardRepository.findById as jest.Mock).mockResolvedValue(undefined);
+      expect(cardController.getCardById(createdCard.id)).rejects.toThrow('Card with id ' + createdCard.id + ' not found');
+    });
   });
 });
