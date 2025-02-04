@@ -13,4 +13,8 @@ export class CardService {
     await this.cardRepository.save(card);
     return card;
   }
+
+  async getCardById(id: string): Promise<Card|undefined> {
+    return this.cardRepository.findById(id);
+  }
 }

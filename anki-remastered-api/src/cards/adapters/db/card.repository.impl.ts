@@ -9,4 +9,8 @@ export class CardRepositoryImpl implements CardRepository {
   async save(card: Card): Promise<void> {
     this.cards.set(card.id, card);
   }
+
+  async findById(id: string): Promise<Card|undefined> {
+    return this.cards.get(id);
+  }
 }

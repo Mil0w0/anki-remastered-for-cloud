@@ -10,7 +10,7 @@ describe('CardController', () => {
   let cardRepository: jest.Mocked<CardRepository>;
 
   beforeEach(() => {
-    cardRepository = { save: jest.fn() };
+    cardRepository = { save: jest.fn(), findById: jest.fn() };
     cardService = new CardService(cardRepository);
     cardController = new CardController(cardService);
   });
@@ -48,7 +48,8 @@ describe('CardController', () => {
       expectedResult.id = createdCard.id;
 
       (cardRepository.findById as jest.Mock).mockResolvedValue(expectedResult);
-      await cardController.getCardById(createdCard.id).toEqual(expectedResult);
+      const cardById = await cardController.getCardById(createdCard.id);
+      expect(cardById).toEqual(expectedResult);
 
       expect(cardRepository.findById).toHaveBeenCalledWith(createdCard.id);
     });
