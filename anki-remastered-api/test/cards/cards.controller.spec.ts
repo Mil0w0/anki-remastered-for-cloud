@@ -68,5 +68,13 @@ describe('CardController', () => {
 
       expect(cardRepository.findAll).toHaveBeenCalled();
     });
+    it('should return an empty array if no card has been created', async () => {
+      (cardRepository.findAll as jest.Mock).mockResolvedValue([]);
+      const cards = await cardController.getAllCards();
+      expect(cards).toHaveLength(0);
+      expect(cards).toEqual([]);
+
+      expect(cardRepository.findAll).toHaveBeenCalled();
+    });
   });
 });
