@@ -1,15 +1,23 @@
+import Paper from '@mui/material/Paper'
+import {Button, FormControl, TextField} from "@mui/material";
+import {formStyle, paperStyle} from "../styles/CreateComponentFormStyles";
+
 export default function CreateCardForm() {
+
     return (
         <>
-            <form>
-                <label htmlFor="question">Question</label>
-                <input type="text" name="question" placeholder="ex: Who is that pokemon?" />
-                <label htmlFor="answer">Answer</label>
-                <input type="text" name="answer" placeholder="ex: Pikachu" />
-                <label htmlFor="tag">Tag</label>
-                <input type="text" name="tag" placeholder="ex: Gaming" />
-                <button type="submit">Create Card</button>
-            </form>
+            <Paper  elevation={1} style={paperStyle}>
+
+                <h1>Create a card</h1>
+
+                <FormControl style={formStyle}>
+                    <TextField name="question" placeholder="ex: Who is that pokemon?" label="Question" />
+                    <TextField name="answer" placeholder="ex: Pikachu" label="Answer" />
+                    <TextField name="tag" placeholder="ex: Gaming" label="Tag" />
+                    <Button variant="contained" color="primary">Create Card</Button>
+                </FormControl>
+
+            </Paper>
         </>
     )
 }

@@ -6,9 +6,9 @@ describe('Create card form component', () => {
     it('renders the form', () => {
         render(<CreateCardForm />);
 
-        const questionInput = screen.getByText("Question");
-        const answerInput = screen.getByText("Answer");
-        const tagINput = screen.getByText("Tag");
+        const questionInput = screen.getByLabelText("Question");
+        const answerInput = screen.getByLabelText("Answer");
+        const tagINput = screen.getByLabelText("Tag");
 
         expect(questionInput).toBeInTheDocument();
         expect(answerInput).toBeInTheDocument();
