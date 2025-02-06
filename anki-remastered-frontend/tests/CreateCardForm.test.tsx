@@ -1,5 +1,6 @@
 import {render, screen} from "@testing-library/react";
 import "@testing-library/jest-dom";
+import CreateCardForm from "../src/components/CreateCardForm";
 
 describe('Create card form component', () => {
     it('renders the form', () => {
