@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import {IsNotEmpty, IsString} from 'class-validator';
 
 export class CreateCardDto {
-    
+
     @IsNotEmpty()
     @IsString()
     question: string;
@@ -18,5 +18,5 @@ export class CreateCardDto {
         this.question = question;
         this.answer = answer;
         this.tag = tag;
-      }
+    }
 }
