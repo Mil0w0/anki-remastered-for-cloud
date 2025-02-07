@@ -52,7 +52,7 @@ describe('CardController', () => {
     });
 
     describe('getCardById', () => {
-        it('should return an exisiting card with it informations', async () => {
+        it('should return an existing card with its information', async () => {
             const expectedCard = new Card(
                 "1",
                 "FIRST",
