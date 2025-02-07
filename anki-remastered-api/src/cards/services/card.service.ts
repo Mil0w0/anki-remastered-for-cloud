@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import {v4 as uuidv4} from 'uuid';
 import {Card} from '../domain/card.entity';
 import {CardRepository} from '../domain/ports/card.repository';
@@ -6,7 +6,7 @@ import {CreateCardDto} from '../domain/dto/createCard.dto';
 
 @Injectable()
 export class CardService {
-    constructor(private readonly cardRepository: CardRepository) {
+    constructor(@Inject('CardRepository') private cardRepository: CardRepository) {
     }
 
     async createCard(createCardDto: CreateCardDto): Promise<Card> {

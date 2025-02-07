@@ -8,11 +8,13 @@ import {CardRepositoryImpl} from './adapters/db/card.repository.impl';
     controllers: [CardController],
     providers: [
         CardService,
+        CardRepositoryImpl,
         {
             provide: 'CardRepository',
             useClass: CardRepositoryImpl
         }
     ],
+    exports: [CardService],
 })
 export class CardModule {
 }
