@@ -27,4 +27,14 @@ export class CardService {
         }
         return cards;
     }
+
+    async levelUpCardCategory(id: string): Promise<Card | undefined> {
+        const card = await this.cardRepository.findById(id);
+        if (!card) {
+            return undefined;
+        }
+        card.levelUpCategory();
+        await this.cardRepository.save(card);
+        return card;
+    }
 }
