@@ -4,6 +4,17 @@ export class Card {
     constructor(public id: string, public category: Category, public question: string, public answer: string, public tag: string) {
     }
 
+    /**
+     * Level up the category of the card
+     *
+     * The category of the card can be leveled up to a maximum {@link Category.SEVENTH} level.
+     *
+     * @returns {Card} The card with the updated category
+     * @throws {Error} If the category is already at the maximum level
+     * @example
+     * card.levelUpCategory();
+     * @see Category
+     */
     levelUpCategory(): Card {
         const categories = Object.values(Category);
         const currentCategoryIndex = categories.indexOf(this.category);

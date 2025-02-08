@@ -23,8 +23,9 @@ describe('Card', () => {
                 "Gaming"
             );
             expect(card.levelUpCategory()).toEqual(expectedCard);
-
         }
+
+        expect(card.category).toBe(Category.SEVENTH);
     });
 
     it('should throw error when category is already at the max level', () => {
