@@ -1,4 +1,5 @@
 import {Card} from "../../src/cards/domain/card.entity";
+import {Category} from "../../src/cards/domain/category.enum";
 
 describe('Card', () => {
 
@@ -6,14 +7,14 @@ describe('Card', () => {
         it('should return card with level two', async () => {
             const card = new Card(
                 "1",
-                "FIRST",
+                Category.FIRST,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
             );
             const expectedCard = new Card(
                 "1",
-                "SECOND",
+                Category.SECOND,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
@@ -25,14 +26,14 @@ describe('Card', () => {
         it('should return card with level three', async () => {
             const card = new Card(
                 "1",
-                "SECOND",
+                Category.SECOND,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
             );
             const expectedCard = new Card(
                 "1",
-                "THIRD",
+                Category.THIRD,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
@@ -44,14 +45,14 @@ describe('Card', () => {
         it('should return card with level four', async () => {
             const card = new Card(
                 "1",
-                "THIRD",
+                Category.THIRD,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
             );
             const expectedCard = new Card(
                 "1",
-                "FOURTH",
+                Category.FOURTH,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"

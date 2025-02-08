@@ -1,15 +1,15 @@
+import { Category } from "./category.enum";
+
 export class Card {
-    constructor(public id: string, public category: string, public question: string, public answer: string, public tag: string) {
+    constructor(public id: string, public category: Category, public question: string, public answer: string, public tag: string) {
     }
 
     levelUpCategory(): Card {
-        if (this.category === "FIRST") {
-            this.category = "SECOND";
-        }else if (this.category === "SECOND") {
-            this.category = "THIRD";
-        } else if (this.category === "THIRD") {
-            this.category = "FOURTH";
-        }
+        const categories = Object.values(Category);
+        const currentCategoryIndex = categories.indexOf(this.category);
+
+
+        this.category = categories[currentCategoryIndex + 1];
 
         return this;
     }
