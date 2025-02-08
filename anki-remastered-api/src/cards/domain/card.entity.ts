@@ -7,6 +7,8 @@ export class Card {
             this.category = "SECOND";
         }else if (this.category === "SECOND") {
             this.category = "THIRD";
+        } else if (this.category === "THIRD") {
+            this.category = "FOURTH";
         }
 
         return this;

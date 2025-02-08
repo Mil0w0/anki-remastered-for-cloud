@@ -40,6 +40,25 @@ describe('Card', () => {
 
             expect(card.levelUpCategory()).toEqual(expectedCard);
         });
+
+        it('should return card with level four', async () => {
+            const card = new Card(
+                "1",
+                "THIRD",
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            const expectedCard = new Card(
+                "1",
+                "FOURTH",
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+
+            expect(card.levelUpCategory()).toEqual(expectedCard);
+        });
     });
 
 });
