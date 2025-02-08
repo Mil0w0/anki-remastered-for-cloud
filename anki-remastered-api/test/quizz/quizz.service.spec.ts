@@ -2,6 +2,7 @@ import {QuizzService} from '../../src/quizz/services/quizz.service';
 import {Card} from "../../src/cards/domain/card.entity";
 import {CardService} from "../../src/cards/services/card.service";
 import {CardRepository} from "../../src/cards/domain/ports/card.repository";
+import {Category} from "../../src/cards/domain/category.enum";
 
 
 describe('QuizzService', () => {
@@ -30,10 +31,10 @@ describe('QuizzService', () => {
         });
 
         // create a card, then we should get it in the eligible cards
-        it('should return the created card in the eligible cards', async () => {
+        it('should return newly created card', async () => {
             const cards = [new Card(
                 "1",
-                "FIRST",
+                Category.FIRST,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"

@@ -3,6 +3,7 @@ import {CardService} from '../../src/cards/services/card.service';
 import {CardRepository} from '../../src/cards/domain/ports/card.repository';
 import {CreateCardDto} from '../../src/cards/domain/dto/createCard.dto';
 import {Card} from '../../src/cards/domain/card.entity';
+import {Category} from "../../src/cards/domain/category.enum";
 
 describe('CardController', () => {
     let cardController: CardController;
@@ -26,7 +27,7 @@ describe('CardController', () => {
             );
             const expectedResult = new Card(
                 "1",
-                "FIRST",
+                 Category.FIRST,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
@@ -55,7 +56,7 @@ describe('CardController', () => {
         it('should return an existing card with its information', async () => {
             const expectedCard = new Card(
                 "1",
-                "FIRST",
+                 Category.FIRST,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
@@ -71,7 +72,7 @@ describe('CardController', () => {
         it('should throw an error if the card does not exist', async () => {
             const expectedResult = new Card(
                 "1",
-                "FIRST",
+                 Category.FIRST,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
@@ -91,14 +92,14 @@ describe('CardController', () => {
             const expectedCards = [
                 new Card(
                     "1",
-                    "FIRST",
+                     Category.FIRST,
                     "Who is that Pokemon ?",
                     "It's PIKACHU !",
                     "Gaming"
                 ),
                 new Card(
                     "2",
-                    "FIRST",
+                     Category.FIRST,
                     "Who is the best Pokemon",
                     "It's FARFETCH'D !",
                     "Gaming"
@@ -126,14 +127,14 @@ describe('CardController', () => {
             const expectedCards = [
                 new Card(
                     "1",
-                    "FIRST",
+                    Category.FIRST, 
                     "Who is that Pokemon ?",
                     "It's PIKACHU !",
                     "Gaming"
                 ),
                 new Card(
                     "2",
-                    "FIRST",
+                     Category.FIRST,
                     "What is the moon made of ?",
                     "Lotta Cheese",
                     "Astrology"

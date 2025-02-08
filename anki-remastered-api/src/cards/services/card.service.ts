@@ -3,6 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 import {Card} from '../domain/card.entity';
 import {CardRepository} from '../domain/ports/card.repository';
 import {CreateCardDto} from '../domain/dto/createCard.dto';
+import {Category} from "../domain/category.enum";
 
 @Injectable()
 export class CardService {
@@ -10,7 +11,7 @@ export class CardService {
     }
 
     async createCard(createCardDto: CreateCardDto): Promise<Card> {
-        const card = new Card(uuidv4(), "FIRST", createCardDto.question, createCardDto.answer, createCardDto.tag);
+        const card = new Card(uuidv4(), Category.FIRST, createCardDto.question, createCardDto.answer, createCardDto.tag);
         await this.cardRepository.save(card);
         return card;
     }
