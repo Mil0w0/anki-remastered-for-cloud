@@ -62,4 +62,16 @@ describe('Card', () => {
         });
     });
 
+    it('should throw error when category is already at the max level', () => {
+        const card = new Card(
+            "1",
+            Category.SEVENTH,
+            "Who is that Pokemon ?",
+            "It's PIKACHU !",
+            "Gaming"
+        );
+
+        expect(() => card.levelUpCategory()).toThrow('Category is already at the maximum level');
+    });
+
 });

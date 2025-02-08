@@ -8,6 +8,10 @@ export class Card {
         const categories = Object.values(Category);
         const currentCategoryIndex = categories.indexOf(this.category);
 
+        if (currentCategoryIndex == categories.length - 1) {
+            throw new Error('Category is already at the maximum level');
+        }
+
 
         this.category = categories[currentCategoryIndex + 1];
 
