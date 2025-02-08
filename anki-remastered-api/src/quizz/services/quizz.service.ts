@@ -1,7 +1,11 @@
+import {CardService} from "../../cards/services/card.service";
+
 export class QuizzService {
-    constructor() {
+
+    constructor(private readonly cardService: CardService) {
     }
+
     getEligibleCards() {
-        return [];
+        return this.cardService.getAllCards();
     }
 }
