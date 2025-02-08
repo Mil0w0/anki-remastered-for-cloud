@@ -5,6 +5,8 @@ export class Card {
     levelUpCategory(): Card {
         if (this.category === "FIRST") {
             this.category = "SECOND";
+        }else if (this.category === "SECOND") {
+            this.category = "THIRD";
         }
 
         return this;
