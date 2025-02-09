@@ -60,6 +60,24 @@ describe('CardService', () => {
 
             expect(cardRepository.save).toHaveBeenCalledWith(existingCard);
         });
+
+        it('should handle isCorrect = false by calling answerQuestion(false)', async () => {
+            const existingCard = new Card(
+                'card-456',
+                Category.FIFTH,
+                'Question?',
+                'Answer',
+                'SomeTag'
+            );
+            jest.spyOn(existingCard, 'answerQuestion');
+
+            cardRepository.findById.mockResolvedValue(existingCard);
+
+            await cardService.answerCard('card-456', false);
+
+            expect(existingCard.answerQuestion).toHaveBeenCalledWith(false);
+            expect(cardRepository.save).toHaveBeenCalledWith(existingCard);
+        });
     });
 
 
