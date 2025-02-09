@@ -22,6 +22,7 @@ export class Card {
      * @throws {Error} If the category is already at the maximum level
      * @example
      * card.levelUpCategory();
+     * @throws {Error} If the category is already at the maximum level
      * @see Category
      */
     levelUpCategory(): Card {
@@ -38,10 +39,26 @@ export class Card {
         return this;
     }
 
+    /**
+     * Reset the category of the card to the {@link Category.FIRST} level
+     *
+     * @example
+     * card.resetCategory();
+     */
     resetCategory(): void {
         this.category = Category.FIRST;
     }
 
+    /**
+     * Answer the question of the card
+     *
+     * If the answer is correct, the category of the card is leveled up.
+     * If the answer is incorrect, the category of the card is reset to the {@link Category.FIRST} level.
+     *
+     * @param isCorrect {boolean} Whether the answer is correct or not
+     * @throws {Error} If the category is already at the maximum level
+     * @see Category
+     */
     answerQuestion(isCorrect: boolean): void {
         if (isCorrect) {
             this.levelUpCategory();
