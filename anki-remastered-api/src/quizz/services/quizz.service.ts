@@ -1,5 +1,5 @@
 import {CardService} from "../../cards/services/card.service";
-import {Category, getCategoryDelayInDays} from "../../cards/domain/category.enum";
+import {getCategoryDelayInDays} from "../../cards/domain/category.enum";
 import {LocalDateUtils} from "../../utils/LocalDateUtils";
 
 export class QuizzService {
@@ -15,7 +15,6 @@ export class QuizzService {
                     return true;
                 }
                 return card.lastResponseDate <= LocalDateUtils.daysAgo(getCategoryDelayInDays(card.category));
-
             }
         );
     }

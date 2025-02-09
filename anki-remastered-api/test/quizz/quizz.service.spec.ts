@@ -106,5 +106,26 @@ describe('QuizzService', () => {
                 }
             }
         );
+
+        it('should only return eligible cards when multiple cards are provided', async () => {
+            const eligibleCardA = new Card('A', Category.FIRST, 'Q1', 'A1', 'Tag1');
+            eligibleCardA.lastResponseDate = LocalDateUtils.daysAgo(1);
+
+            const cardB = new Card('B', Category.FIRST, 'Q2', 'A2', 'Tag2');
+            cardB.lastResponseDate = LocalDateUtils.daysAgo(0);
+
+            const eligibleCardC = new Card('C', Category.SECOND, 'Q3', 'A3', 'Tag3');
+            eligibleCardC.lastResponseDate = LocalDateUtils.daysAgo(2);
+
+            const cardD = new Card('D', Category.SECOND, 'Q4', 'A4', 'Tag4');
+            cardD.lastResponseDate = LocalDateUtils.daysAgo(1);
+
+            cardRepository.findAll.mockResolvedValue([eligibleCardA, cardB, eligibleCardC, cardD]);
+
+            const result = await quizzService.getEligibleCards();
+
+            // We expect only the eligible ones: eligibleCardA and eligibleCardC
+            expect(result).toEqual([eligibleCardA, eligibleCardC]);
+        });
     });
 });
