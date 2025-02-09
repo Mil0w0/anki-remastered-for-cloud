@@ -20,6 +20,10 @@ export function getCategoryDelayInDays(category: Category): number {
             return 8;
         case Category.FIFTH:
             return 16;
+        case Category.SIXTH:
+            return 32;
+        case Category.SEVENTH:
+            return 64;
         default:
             throw new Error('Category not supported');
     }

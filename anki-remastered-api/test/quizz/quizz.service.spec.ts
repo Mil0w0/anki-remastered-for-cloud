@@ -258,5 +258,131 @@ describe('QuizzService', () => {
             const resultFirstCategory = await quizzService.getEligibleCards();
             expect(resultFirstCategory).toEqual([card]);
         });
+
+        it('should not return card with last response date 16 days ago and SIXTH category', async () => {
+            const card = new Card(
+                "1",
+                Category.SIXTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(16);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([]);
+        });
+
+        it('should return card with last response date 32 days ago and SIXTH, FIFTH, FOURTH, THIRD, SECOND or FIRST category', async () => {
+            const card = new Card(
+                "1",
+                Category.SIXTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(32);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([card]);
+
+            card.category = Category.FIFTH;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFifthCategory = await quizzService.getEligibleCards();
+            expect(resultFifthCategory).toEqual([card]);
+
+            card.category = Category.FOURTH;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFourthCategory = await quizzService.getEligibleCards();
+            expect(resultFourthCategory).toEqual([card]);
+
+            card.category = Category.THIRD;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultThirdCategory = await quizzService.getEligibleCards();
+            expect(resultThirdCategory).toEqual([card]);
+
+            card.category = Category.SECOND;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultSecondCategory = await quizzService.getEligibleCards();
+            expect(resultSecondCategory).toEqual([card]);
+
+            card.category = Category.FIRST;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFirstCategory = await quizzService.getEligibleCards();
+            expect(resultFirstCategory).toEqual([card]);
+        });
+
+        it('should not return card with last response date 32 days ago and SEVENTH category', async () => {
+            const card = new Card(
+                "1",
+                Category.SEVENTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(32);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([]);
+        });
+
+        it('should return card with last response date 64 days ago and SEVENTH, SIXTH, FIFTH, FOURTH, THIRD, SECOND or FIRST category', async () => {
+            const card = new Card(
+                "1",
+                Category.SEVENTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(64);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([card]);
+
+            card.category = Category.SIXTH;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultSixthCategory = await quizzService.getEligibleCards();
+            expect(resultSixthCategory).toEqual([card]);
+
+            card.category = Category.FIFTH;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFifthCategory = await quizzService.getEligibleCards();
+            expect(resultFifthCategory).toEqual([card]);
+
+            card.category = Category.FOURTH;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFourthCategory = await quizzService.getEligibleCards();
+            expect(resultFourthCategory).toEqual([card]);
+
+            card.category = Category.THIRD;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultThirdCategory = await quizzService.getEligibleCards();
+            expect(resultThirdCategory).toEqual([card]);
+
+            card.category = Category.SECOND;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultSecondCategory = await quizzService.getEligibleCards();
+            expect(resultSecondCategory).toEqual([card]);
+
+            card.category = Category.FIRST;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFirstCategory = await quizzService.getEligibleCards();
+            expect(resultFirstCategory).toEqual([card]);
+        });
     });
 });
