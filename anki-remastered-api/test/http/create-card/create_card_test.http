@@ -1,0 +1,43 @@
+# Scenario: Card creation
+# When the user creates a new card with:
+#   question: 'What is pair programming ?'
+#   answer: 'A practice to work in pair on same computer.'
+#   tag: 'Teamwork'
+
+### 1) Create a new card
+POST http://localhost:3000/cards
+Content-Type: application/json
+
+{
+  "question": "What is pair programming ?",
+  "answer": "A practice to work in pair on same computer.",
+  "tag": "Teamwork"
+}
+
+> {%
+    client.test("Création carte => statut 201", function () {
+        client.assert(response.status === 201, "Le statut de la réponse n'est pas 201 : " + response.status);
+    });
+
+    client.test("La fiche est en catégorie FIRST", function () {
+        client.assert(response.body.category === "FIRST", "La catégorie n'est pas FIRST : " + response.body.category);
+    });
+
+    // Store the created card ID for future tests
+    client.global.set("createdCardId", response.body.id);
+%}
+
+### 2) Assert that the newly created card is present in the list of cards when getting all cards
+GET http://localhost:3000/cards
+
+> {%
+    client.test("Récupération par tag => statut 200", function () {
+        client.assert(response.status === 200, "Le statut de la réponse n'est pas 200 : " + response.status);
+    });
+
+    const cardsArray = response.body;
+    client.test("La fiche nouvellement créée est présente dans la liste", function () {
+        const foundCard = cardsArray.find(c => c.id === client.global.get("createdCardId"));
+        client.assert(foundCard !== undefined, "Aucune fiche avec l'ID créé n'a été trouvée pour le tag 'Teamwork'.");
+    });
+%}
