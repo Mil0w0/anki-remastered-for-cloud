@@ -129,7 +129,7 @@ describe('QuizzService', () => {
             expect(result).toEqual([]);
         });
 
-        it('should return card with last response date 4 days ago and THIRD category', async () => {
+        it('should return card with last response date 4 days ago and THIRD, SECOND or FIRST category', async () => {
             const card = new Card(
                 "1",
                 Category.THIRD,
@@ -142,6 +142,19 @@ describe('QuizzService', () => {
 
             const result = await quizzService.getEligibleCards();
             expect(result).toEqual([card]);
+
+            card.category = Category.SECOND;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultSecondCategory = await quizzService.getEligibleCards();
+            expect(resultSecondCategory).toEqual([card]);
+
+
+            card.category = Category.FIRST;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFirstCategory = await quizzService.getEligibleCards();
+            expect(resultFirstCategory).toEqual([card]);
         });
     });
 });
