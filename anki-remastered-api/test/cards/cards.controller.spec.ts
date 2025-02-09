@@ -149,4 +149,22 @@ describe('CardController', () => {
             expect(cardRepository.findAll).toHaveBeenCalled();
         });
     });
+
+    describe('answerCard', () => {
+        it('should return 204 when service call succeeds', async () => {
+            cardService.answerCard.mockResolvedValue(undefined);
+
+            const cardId = 'card-123';
+            const body: AnswerCardDto = { isValid: true };
+
+            const result = await controller.answerCard(cardId, body);
+
+            expect(result).toBeUndefined();
+
+            expect(cardServiceMock.answerCard).toHaveBeenCalledWith(
+                'card-123',
+                true,
+            );
+        });
+    });
 });
