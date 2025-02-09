@@ -61,5 +61,25 @@ describe('QuizzService', () => {
             expect(result).toEqual([]);
         });
 
+        it('should return card with last response date yesterday and FIRST or SECOND category', async () => {
+            const card = new Card(
+                "1",
+                Category.FIRST,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = new Date();
+            card.lastResponseDate.setDate(card.lastResponseDate.getDate() - 1);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([card]);
+
+            card.category = Category.SECOND;
+
+            const resultSecondCategory = await quizzService.getEligibleCards();
+            expect(resultSecondCategory).toEqual([card]);
+        });
     });
 });
