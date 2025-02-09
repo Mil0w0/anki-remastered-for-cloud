@@ -14,34 +14,36 @@ describe('QuizzController', () => {
         quizzController = new QuizzController(quizzService);
     });
 
-    it('should return whatever quizzService.getEligibleCards() returns', async () => {
-        // if it returns an empty array, it should return an empty array
-        (quizzService.getEligibleCards as jest.Mock).mockResolvedValue([]);
-        expect(await quizzController.getQuizz()).toEqual([]);
+    describe('getQuizz', () => {
+        it('should return whatever quizzService.getEligibleCards() returns', async () => {
+            // if it returns an empty array, it should return an empty array
+            jest.spyOn(quizzService, 'getEligibleCards').mockResolvedValue([]);
+            expect(await quizzController.getQuizz()).toEqual([]);
 
-        // if it returns an array of cards, it should return that array
-        const mockCards = [
-            new Card(
-                '1',
-                Category.FIRST,
-                'Q1',
-                'A1',
-                'tag1'
-            ),
-            new Card(
-                '2',
-                Category.SECOND,
-                'Q2',
-                'A2',
-                'tag2'
-            ),
-        ];
+            // if it returns an array of cards, it should return that array
+            const mockCards = [
+                new Card(
+                    '1',
+                    Category.FIRST,
+                    'Q1',
+                    'A1',
+                    'tag1'
+                ),
+                new Card(
+                    '2',
+                    Category.SECOND,
+                    'Q2',
+                    'A2',
+                    'tag2'
+                ),
+            ];
 
-        (quizzService.getEligibleCards as jest.Mock).mockResolvedValue(mockCards);
+            jest.spyOn(quizzService, 'getEligibleCards').mockResolvedValue(mockCards);
 
-        const result = await quizzController.getQuizz();
+            const result = await quizzController.getQuizz();
 
-        expect(quizzService.getEligibleCards).toHaveBeenCalledTimes(2);
-        expect(result).toBe(mockCards);
+            expect(quizzService.getEligibleCards).toHaveBeenCalledTimes(2);
+            expect(result).toBe(mockCards);
+        });
     });
 });
