@@ -57,4 +57,23 @@ describe('Card', () => {
         });
     });
 
+
+    describe('answerQuestion', () => {
+        it('should level up if answer is correct', () => {
+            const card = new Card(
+                "1",
+                Category.FIRST,
+                "Question?",
+                "Answer",
+                "Tag"
+            );
+            jest.spyOn(card, 'levelUpCategory');
+
+            card.answerQuestion(true);
+
+            expect(card.category).toBe(Category.SECOND);
+            expect(card.levelUpCategory).toHaveBeenCalled();
+        });
+    });
+
 });

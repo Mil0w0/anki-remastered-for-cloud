@@ -41,4 +41,10 @@ export class Card {
     resetCategory() : void {
         this.category = Category.FIRST;
     }
+
+    answerQuestion(isCorrect: boolean) {
+        if (isCorrect) {
+            this.levelUpCategory();
+        }
+    }
 }
