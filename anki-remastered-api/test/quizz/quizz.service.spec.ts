@@ -156,5 +156,53 @@ describe('QuizzService', () => {
             const resultFirstCategory = await quizzService.getEligibleCards();
             expect(resultFirstCategory).toEqual([card]);
         });
+
+        it('should not return card with last response date 4 days ago and FOURTH category', async () => {
+            const card = new Card(
+                "1",
+                Category.FOURTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(4);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([]);
+        });
+
+        it('should return card with last response date 8 days ago and FOURTH, THIRD, SECOND or FIRST category', async () => {
+            const card = new Card(
+                "1",
+                Category.FOURTH,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = LocalDateUtils.daysAgo(8);
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([card]);
+
+            card.category = Category.THIRD;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultThirdCategory = await quizzService.getEligibleCards();
+            expect(resultThirdCategory).toEqual([card]);
+
+            card.category = Category.SECOND;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultSecondCategory = await quizzService.getEligibleCards();
+            expect(resultSecondCategory).toEqual([card]);
+
+            card.category = Category.FIRST;
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultFirstCategory = await quizzService.getEligibleCards();
+            expect(resultFirstCategory).toEqual([card]);
+        });
     });
 });
