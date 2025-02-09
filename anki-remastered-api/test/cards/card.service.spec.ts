@@ -21,13 +21,28 @@ describe('CardService', () => {
     describe('answerCard', () => {
 
         it('should throw NotFoundException if card does not exist', async () => {
-            // Arrange
             cardRepository.findById.mockResolvedValue(undefined);
 
-            // Act & Assert
             await expect(
                 cardService.answerCard('nonexistent-card-id', true),
             ).rejects.toThrow(NotFoundException);
+        });
+
+        it('should call answerQuestion on found card', async () => {
+            const existingCard = new Card(
+                'card-123',
+                Category.FIRST,
+                'Question?',
+                'Answer',
+                'SomeTag'
+            );
+            jest.spyOn(existingCard, 'answerQuestion');
+
+            cardRepository.findById.mockResolvedValue(existingCard);
+
+            await cardService.answerCard('card-123', true);
+
+            expect(existingCard.answerQuestion).toHaveBeenCalledWith(true);
         });
     });
 

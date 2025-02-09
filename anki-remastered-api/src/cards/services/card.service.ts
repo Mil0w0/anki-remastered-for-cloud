@@ -28,13 +28,12 @@ export class CardService {
         return cards;
     }
 
-    async answerCard(cardId: string, correct: boolean): Promise<Card | undefined> {
+    async answerCard(cardId: string, isCorrect: boolean): Promise<void> {
         const card = await this.cardRepository.findById(cardId);
-
         if (!card) {
             throw new NotFoundException(`Card with id ${cardId} not found`);
         }
 
-        return card;
+        card.answerQuestion(isCorrect);
     }
 }
