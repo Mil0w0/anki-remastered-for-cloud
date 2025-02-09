@@ -6,6 +6,12 @@ export class QuizzService {
     }
 
     getEligibleCards() {
-        return this.cardService.getAllCards();
+        return this.cardService.getAllCards()
+            .then(cards =>
+                cards.filter(
+                    card => card.lastResponseDate === null ||
+                        card.lastResponseDate < new Date(new Date().toLocaleDateString())
+                )
+            );
     }
 }
