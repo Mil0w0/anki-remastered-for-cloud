@@ -1,5 +1,5 @@
 import {CardService} from "../../cards/services/card.service";
-import {Category} from "../../cards/domain/category.enum";
+import {Category, getCategoryDelayInDays} from "../../cards/domain/category.enum";
 import {LocalDateUtils} from "../../utils/LocalDateUtils";
 
 export class QuizzService {
@@ -10,20 +10,12 @@ export class QuizzService {
     async getEligibleCards() {
         const cards = await this.cardService.getAllCards();
         return cards.filter(card => {
-                // If never answered, eligible
+                // if the card has never been answered, it is eligible
                 if (!card.lastResponseDate) {
                     return true;
                 }
-                switch (card.category) {
-                    case Category.FIRST:
-                        return card.lastResponseDate <= LocalDateUtils.yesterday();
-                    case Category.SECOND:
-                        return card.lastResponseDate <= LocalDateUtils.daysAgo(2);
-                    case Category.THIRD:
-                        return card.lastResponseDate <= LocalDateUtils.daysAgo(4);
-                    default:
-                        return false;
-                }
+                return card.lastResponseDate <= LocalDateUtils.daysAgo(getCategoryDelayInDays(card.category));
+
             }
         );
     }
