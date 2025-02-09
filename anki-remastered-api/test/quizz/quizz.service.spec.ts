@@ -3,6 +3,7 @@ import {Card} from "../../src/cards/domain/card.entity";
 import {CardService} from "../../src/cards/services/card.service";
 import {CardRepository} from "../../src/cards/domain/ports/card.repository";
 import {Category} from "../../src/cards/domain/category.enum";
+import {LocalDateUtils} from "../../src/utils/LocalDateUtils";
 
 
 describe('QuizzService', () => {
@@ -54,7 +55,7 @@ describe('QuizzService', () => {
                 "It's PIKACHU !",
                 "Gaming"
             );
-            card.lastResponseDate = new Date();
+            card.lastResponseDate = LocalDateUtils.today();
             cardRepository.findAll.mockResolvedValue([card]);
 
             const result = await quizzService.getEligibleCards();
@@ -69,8 +70,7 @@ describe('QuizzService', () => {
                 "It's PIKACHU !",
                 "Gaming"
             );
-            card.lastResponseDate = new Date();
-            card.lastResponseDate.setDate(card.lastResponseDate.getDate() - 1);
+            card.lastResponseDate = LocalDateUtils.yesterday();
             cardRepository.findAll.mockResolvedValue([card]);
 
             const result = await quizzService.getEligibleCards();
@@ -90,8 +90,7 @@ describe('QuizzService', () => {
                 "It's PIKACHU !",
                 "Gaming"
             );
-            card.lastResponseDate = new Date();
-            card.lastResponseDate.setDate(card.lastResponseDate.getDate() - 1);
+            card.lastResponseDate = LocalDateUtils.yesterday();
             cardRepository.findAll.mockResolvedValue([card]);
 
             const result = await quizzService.getEligibleCards();
