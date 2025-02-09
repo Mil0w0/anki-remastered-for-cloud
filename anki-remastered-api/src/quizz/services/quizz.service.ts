@@ -1,6 +1,6 @@
 import {CardService} from "../../cards/services/card.service";
 import {getCategoryDelayInDays} from "../../cards/domain/category.enum";
-import {LocalDateUtils} from "../../utils/LocalDateUtils";
+import {LocalDateUtils} from "../../utils/local.date.utils";
 
 export class QuizzService {
 

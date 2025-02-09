@@ -1,8 +1,8 @@
 // quizz.controller.spec.ts
-import {QuizzService} from "../../src/quizz/services/quizz.service";
-import {Card} from "../../src/cards/domain/card.entity";
-import {Category} from "../../src/cards/domain/category.enum";
-import {QuizzController} from "../../src/quizz/adapter/controller/quizz.controller";
+import {QuizzService} from "../../../../src/quizz/services/quizz.service";
+import {Card} from "../../../../src/cards/domain/card.entity";
+import {Category} from "../../../../src/cards/domain/category.enum";
+import {QuizzController} from "../../../../src/quizz/adapter/controller/quizz.controller";
 
 describe('QuizzController', () => {
     let quizzController: QuizzController;

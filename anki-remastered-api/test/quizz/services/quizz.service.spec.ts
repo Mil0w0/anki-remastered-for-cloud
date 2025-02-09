@@ -1,9 +1,9 @@
-import {QuizzService} from '../../src/quizz/services/quizz.service';
-import {Card} from "../../src/cards/domain/card.entity";
-import {CardService} from "../../src/cards/services/card.service";
-import {CardRepository} from "../../src/cards/domain/ports/card.repository";
-import {Category} from "../../src/cards/domain/category.enum";
-import {LocalDateUtils} from "../../src/utils/LocalDateUtils";
+import {QuizzService} from '../../../src/quizz/services/quizz.service';
+import {Card} from "../../../src/cards/domain/card.entity";
+import {CardService} from "../../../src/cards/services/card.service";
+import {CardRepository} from "../../../src/cards/domain/ports/card.repository";
+import {Category} from "../../../src/cards/domain/category.enum";
+import {LocalDateUtils} from "../../../src/utils/local.date.utils";
 
 
 describe('QuizzService', () => {

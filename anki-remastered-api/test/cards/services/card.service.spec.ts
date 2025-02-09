@@ -1,7 +1,7 @@
-import { CardService } from '../../src/cards/services/card.service';
-import { CardRepository } from '../../src/cards/domain/ports/card.repository';
-import { Card } from '../../src/cards/domain/card.entity';
-import { Category } from '../../src/cards/domain/category.enum';
+import { CardService } from '../../../src/cards/services/card.service';
+import { CardRepository } from '../../../src/cards/domain/ports/card.repository';
+import { Card } from '../../../src/cards/domain/card.entity';
+import { Category } from '../../../src/cards/domain/category.enum';
 import {NotFoundException} from "@nestjs/common";
 
 describe('CardService', () => {

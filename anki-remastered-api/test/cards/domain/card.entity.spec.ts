@@ -1,5 +1,5 @@
-import {Card} from "../../src/cards/domain/card.entity";
-import {Category} from "../../src/cards/domain/category.enum";
+import {Card} from "../../../src/cards/domain/card.entity";
+import {Category} from "../../../src/cards/domain/category.enum";
 
 describe('Card', () => {
 

@@ -1,10 +1,10 @@
-import {CardController} from '../../src/cards/adapters/controller/card.controller';
-import {CardService} from '../../src/cards/services/card.service';
-import {CardRepository} from '../../src/cards/domain/ports/card.repository';
-import {CreateCardDto} from '../../src/cards/domain/dto/createCard.dto';
-import {Card} from '../../src/cards/domain/card.entity';
-import {Category} from "../../src/cards/domain/category.enum";
-import {AnswerCardDto} from "../../src/cards/domain/dto/answerCard.dto";
+import {CardController} from '../../../../src/cards/adapters/controller/card.controller';
+import {CardService} from '../../../../src/cards/services/card.service';
+import {CardRepository} from '../../../../src/cards/domain/ports/card.repository';
+import {CreateCardDto} from '../../../../src/cards/domain/dto/createCard.dto';
+import {Card} from '../../../../src/cards/domain/card.entity';
+import {Category} from "../../../../src/cards/domain/category.enum";
+import {AnswerCardDto} from "../../../../src/cards/domain/dto/answerCard.dto";
 import {NotFoundException} from "@nestjs/common";
 
 describe('CardController', () => {

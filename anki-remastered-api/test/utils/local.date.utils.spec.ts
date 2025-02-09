@@ -1,4 +1,4 @@
-import {LocalDateUtils} from "../../src/utils/LocalDateUtils";
+import {LocalDateUtils} from "../../src/utils/local.date.utils";
 
 describe('LocalDateUtils', () => {
     describe('today', () => {
