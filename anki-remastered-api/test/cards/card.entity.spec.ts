@@ -68,12 +68,31 @@ describe('Card', () => {
                 "Tag"
             );
             jest.spyOn(card, 'levelUpCategory');
+            jest.spyOn(card, 'resetCategory');
 
             card.answerQuestion(true);
 
             expect(card.category).toBe(Category.SECOND);
             expect(card.levelUpCategory).toHaveBeenCalled();
+            expect(card.resetCategory).not.toHaveBeenCalled();
+        });
+
+        it('should reset category if answer is incorrect', () => {
+            const card = new Card(
+                "1",
+                Category.THIRD,
+                "Question?",
+                "Answer",
+                "Tag"
+            );
+            jest.spyOn(card, 'resetCategory');
+            jest.spyOn(card, 'levelUpCategory');
+
+            card.answerQuestion(false);
+
+            expect(card.category).toBe(Category.FIRST);
+            expect(card.resetCategory).toHaveBeenCalled();
+            expect(card.levelUpCategory).not.toHaveBeenCalled();
         });
     });
-
 });

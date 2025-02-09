@@ -38,13 +38,15 @@ export class Card {
         return this;
     }
 
-    resetCategory() : void {
+    resetCategory(): void {
         this.category = Category.FIRST;
     }
 
-    answerQuestion(isCorrect: boolean) {
+    answerQuestion(isCorrect: boolean): void {
         if (isCorrect) {
             this.levelUpCategory();
+        } else {
+            this.resetCategory();
         }
     }
 }
