@@ -35,5 +35,6 @@ export class CardService {
         }
 
         card.answerQuestion(isCorrect);
+        await this.cardRepository.save(card);
     }
 }

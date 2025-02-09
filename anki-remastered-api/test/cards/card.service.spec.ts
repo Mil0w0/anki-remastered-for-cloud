@@ -44,6 +44,22 @@ describe('CardService', () => {
 
             expect(existingCard.answerQuestion).toHaveBeenCalledWith(true);
         });
+
+        it('should save the card after answering', async () => {
+            const existingCard = new Card(
+                'card-123',
+                Category.FIRST,
+                'Question?',
+                'Answer',
+                'SomeTag'
+            );
+
+            cardRepository.findById.mockResolvedValue(existingCard);
+
+            await cardService.answerCard('card-123', true);
+
+            expect(cardRepository.save).toHaveBeenCalledWith(existingCard);
+        });
     });
 
 
