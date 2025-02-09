@@ -31,358 +31,80 @@ describe('QuizzService', () => {
             });
         });
 
-        // create a card, then we should get it in the eligible cards
-        it('should return newly created card', async () => {
-            const cards = [new Card(
-                "1",
-                Category.FIRST,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            )];
-            cardRepository.findAll.mockResolvedValue(cards);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result[0]).toEqual(cards[0]);
-        });
-
-        // if the card last response date is today, it should not be returned
-        it('should not return card with last response date today', async () => {
-            const card = new Card(
-                "1",
-                Category.FIRST,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.today();
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date as yesterday and FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.FIRST,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.yesterday();
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-        });
-
-        it('should not return card with last response date yesterday and SECOND category', async () => {
-            const card = new Card(
-                "1",
-                Category.SECOND,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.yesterday();
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 2 days ago and SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.SECOND,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(2);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result2 = await quizzService.getEligibleCards();
-
-            expect(result2).toEqual([card]);
-        });
-
-        it('should not return card with last response date yesterday and THIRD category', async () => {
-            const card = new Card(
-                "1",
-                Category.THIRD,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.yesterday();
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 4 days ago and THIRD, SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.THIRD,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(4);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.SECOND;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSecondCategory = await quizzService.getEligibleCards();
-            expect(resultSecondCategory).toEqual([card]);
-
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFirstCategory = await quizzService.getEligibleCards();
-            expect(resultFirstCategory).toEqual([card]);
-        });
-
-        it('should not return card with last response date 4 days ago and FOURTH category', async () => {
-            const card = new Card(
-                "1",
-                Category.FOURTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(4);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 8 days ago and FOURTH, THIRD, SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.FOURTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(8);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.THIRD;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultThirdCategory = await quizzService.getEligibleCards();
-            expect(resultThirdCategory).toEqual([card]);
-
-            card.category = Category.SECOND;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSecondCategory = await quizzService.getEligibleCards();
-            expect(resultSecondCategory).toEqual([card]);
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFirstCategory = await quizzService.getEligibleCards();
-            expect(resultFirstCategory).toEqual([card]);
-        });
-
-        it('should not return card with last response date 8 days ago and FIFTH category', async () => {
-            const card = new Card(
-                "1",
-                Category.FIFTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(8);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 16 days ago and FIFTH, FOURTH, THIRD, SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.FIFTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(16);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.FOURTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFourthCategory = await quizzService.getEligibleCards();
-            expect(resultFourthCategory).toEqual([card]);
-
-            card.category = Category.THIRD;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultThirdCategory = await quizzService.getEligibleCards();
-            expect(resultThirdCategory).toEqual([card]);
-
-            card.category = Category.SECOND;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSecondCategory = await quizzService.getEligibleCards();
-            expect(resultSecondCategory).toEqual([card]);
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFirstCategory = await quizzService.getEligibleCards();
-            expect(resultFirstCategory).toEqual([card]);
-        });
-
-        it('should not return card with last response date 16 days ago and SIXTH category', async () => {
-            const card = new Card(
-                "1",
-                Category.SIXTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(16);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 32 days ago and SIXTH, FIFTH, FOURTH, THIRD, SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.SIXTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(32);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.FIFTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFifthCategory = await quizzService.getEligibleCards();
-            expect(resultFifthCategory).toEqual([card]);
-
-            card.category = Category.FOURTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFourthCategory = await quizzService.getEligibleCards();
-            expect(resultFourthCategory).toEqual([card]);
-
-            card.category = Category.THIRD;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultThirdCategory = await quizzService.getEligibleCards();
-            expect(resultThirdCategory).toEqual([card]);
-
-            card.category = Category.SECOND;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSecondCategory = await quizzService.getEligibleCards();
-            expect(resultSecondCategory).toEqual([card]);
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFirstCategory = await quizzService.getEligibleCards();
-            expect(resultFirstCategory).toEqual([card]);
-        });
-
-        it('should not return card with last response date 32 days ago and SEVENTH category', async () => {
-            const card = new Card(
-                "1",
-                Category.SEVENTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(32);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([]);
-        });
-
-        it('should return card with last response date 64 days ago and SEVENTH, SIXTH, FIFTH, FOURTH, THIRD, SECOND or FIRST category', async () => {
-            const card = new Card(
-                "1",
-                Category.SEVENTH,
-                "Who is that Pokemon ?",
-                "It's PIKACHU !",
-                "Gaming"
-            );
-            card.lastResponseDate = LocalDateUtils.daysAgo(64);
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const result = await quizzService.getEligibleCards();
-            expect(result).toEqual([card]);
-
-            card.category = Category.SIXTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSixthCategory = await quizzService.getEligibleCards();
-            expect(resultSixthCategory).toEqual([card]);
-
-            card.category = Category.FIFTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFifthCategory = await quizzService.getEligibleCards();
-            expect(resultFifthCategory).toEqual([card]);
-
-            card.category = Category.FOURTH;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFourthCategory = await quizzService.getEligibleCards();
-            expect(resultFourthCategory).toEqual([card]);
-
-            card.category = Category.THIRD;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultThirdCategory = await quizzService.getEligibleCards();
-            expect(resultThirdCategory).toEqual([card]);
-
-            card.category = Category.SECOND;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultSecondCategory = await quizzService.getEligibleCards();
-            expect(resultSecondCategory).toEqual([card]);
-
-            card.category = Category.FIRST;
-            cardRepository.findAll.mockResolvedValue([card]);
-
-            const resultFirstCategory = await quizzService.getEligibleCards();
-            expect(resultFirstCategory).toEqual([card]);
-        });
+        /**
+         * Table of scenarios:
+         * "daysAgo" -> how many days in the past `lastResponseDate` is
+         * "category" -> the card's category
+         * "expected" -> boolean, whether we expect it to be returned
+         * "description" -> optional short description
+         */
+        it.each`
+              daysAgo | category               | expected   | description
+              // Newly created card
+              ${null} | ${Category.FIRST}      | ${true}    | ${'no last response date -> should be returned'}
+              
+              // Category.FIRST checks
+              ${0}    | ${Category.FIRST}      | ${false}   | ${'last response is today for FIRST -> not returned'}
+              ${1}    | ${Category.FIRST}      | ${true}    | ${'last response is yesterday for FIRST -> returned'}
+              ${2}    | ${Category.FIRST}      | ${true}    | ${'2 days ago for FIRST -> returned'}
+              
+              // Category.SECOND checks
+              ${1}    | ${Category.SECOND}     | ${false}   | ${'last response is yesterday for SECOND -> not returned'}
+              ${2}    | ${Category.SECOND}     | ${true}    | ${'2 days ago for SECOND -> returned'}
+              ${4}    | ${Category.SECOND}     | ${true}    | ${'4 days ago for SECOND -> returned'}
+              
+              // Category.THIRD checks
+              ${2}    | ${Category.THIRD}      | ${false}   | ${'2 days ago for THIRD -> not returned'}
+              ${4}    | ${Category.THIRD}      | ${true}    | ${'4 days ago for THIRD -> returned'}
+              ${8}    | ${Category.THIRD}      | ${true}    | ${'8 days ago for THIRD -> returned'}
+              
+              // Category.FOURTH checks
+              ${4}    | ${Category.FOURTH}     | ${false}   | ${'4 days ago for FOURTH -> not returned'}
+              ${8}    | ${Category.FOURTH}     | ${true}    | ${'8 days ago for FOURTH -> returned'}
+              ${16}   | ${Category.FOURTH}     | ${true}    | ${'16 days ago for FOURTH -> returned'}
+              
+              // Category.FIFTH checks
+              ${8}    | ${Category.FIFTH}      | ${false}   | ${'8 days ago for FIFTH -> not returned'}
+              ${16}   | ${Category.FIFTH}      | ${true}    | ${'16 days ago for FIFTH -> returned'}
+              ${32}   | ${Category.FIFTH}      | ${true}    | ${'32 days ago for FIFTH -> returned'}
+              
+              // Category.SIXTH checks
+              ${16}   | ${Category.SIXTH}      | ${false}   | ${'16 days ago for SIXTH -> not returned'}
+              ${32}   | ${Category.SIXTH}      | ${true}    | ${'32 days ago for SIXTH -> returned'}
+              ${64}   | ${Category.SIXTH}      | ${true}    | ${'64 days ago for SIXTH -> returned'}
+              
+              // Category.SEVENTH checks
+              ${32}   | ${Category.SEVENTH}    | ${false}   | ${'32 days ago for SEVENTH -> not returned'}
+              ${64}   | ${Category.SEVENTH}    | ${true}    | ${'64 days ago for SEVENTH -> returned'}
+              ${128}  | ${Category.SEVENTH}    | ${true}    | ${'128 days ago for SEVENTH -> returned'}
+            `(
+            '($description) -> daysAgo=$daysAgo, category=$category => expected=$expected',
+            async ({daysAgo, category, expected}) => {
+                // Create the card
+                const card = new Card(
+                    "1",
+                    category,
+                    "Who is that Pokemon ?",
+                    "It's PIKACHU !",
+                    "Gaming"
+                );
+
+                // If daysAgo is null, we'll interpret that as "never answered"
+                if (daysAgo !== null) {
+                    card.lastResponseDate = LocalDateUtils.daysAgo(daysAgo);
+                } else {
+                    card.lastResponseDate = null;
+                }
+
+                cardRepository.findAll.mockResolvedValue([card]);
+
+                const result = await quizzService.getEligibleCards();
+                if (expected) {
+                    expect(result).toEqual([card]);
+                } else {
+                    expect(result).toEqual([]);
+                }
+            }
+        );
     });
 });
