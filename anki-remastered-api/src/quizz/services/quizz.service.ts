@@ -10,6 +10,11 @@ export class QuizzService {
     async getEligibleCards() {
         const cards = await this.cardService.getAllCards();
         return cards.filter(card => {
+                // if the card is done, it is never eligible
+                if (card.isDone()) {
+                    return false;
+                }
+
                 // if the card has never been answered, it is eligible
                 if (!card.lastResponseDate) {
                     return true;

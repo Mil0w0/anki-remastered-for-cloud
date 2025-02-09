@@ -19,10 +19,8 @@ export class Card {
      * The category of the card can be leveled up to a maximum {@link Category.SEVENTH} level.
      *
      * @returns {Card} The card with the updated category
-     * @throws {Error} If the category is already at the maximum level
-     * @example
-     * card.levelUpCategory();
-     * @throws {Error} If the category is already at the maximum level
+     * @throws {Error} If the category is already {@link Category.DONE}
+     * @example card.levelUpCategory();
      * @see Category
      */
     levelUpCategory(): Card {
@@ -30,7 +28,7 @@ export class Card {
         const currentCategoryIndex = categories.indexOf(this.category);
 
         if (currentCategoryIndex == categories.length - 1) {
-            throw new Error('Category is already at the maximum level');
+            throw new Error('Card category is already DONE');
         }
 
 
@@ -56,7 +54,7 @@ export class Card {
      * If the answer is incorrect, the category of the card is reset to the {@link Category.FIRST} level.
      *
      * @param isCorrect {boolean} Whether the answer is correct or not
-     * @throws {Error} If the category is already at the maximum level
+     * @throws {Error} If the category is already {@link Category.DONE}
      * @see Category
      */
     answerQuestion(isCorrect: boolean): void {
@@ -65,5 +63,17 @@ export class Card {
         } else {
             this.resetCategory();
         }
+    }
+
+    /**
+     * Check if the card is in the {@link Category.DONE} category
+     *
+     * @returns {boolean} Whether the card is in the {@link Category.DONE} category or not
+     * @example
+     * card.isDone();
+     * @see Category
+     */
+    isDone(): boolean {
+        return this.category === Category.DONE;
     }
 }

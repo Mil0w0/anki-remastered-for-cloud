@@ -12,33 +12,38 @@ describe('Card', () => {
                 "It's PIKACHU !",
                 "Gaming"
             );
-            const categories: Category[] = Object.values(Category);
-            expect(categories.length).toBe(7);
+            const expectedTransitions: Category[] = [
+                Category.SECOND,
+                Category.THIRD,
+                Category.FOURTH,
+                Category.FIFTH,
+                Category.SIXTH,
+                Category.SEVENTH,
+                Category.DONE,
+            ];
 
-            for (let i = 0; i < 6; i++) {
-                let expectedCard = new Card(
-                    "1",
-                    categories[i + 1],
-                    "Who is that Pokemon ?",
-                    "It's PIKACHU !",
-                    "Gaming"
-                );
-                expect(card.levelUpCategory()).toEqual(expectedCard);
+            jest.spyOn(card, 'levelUpCategory');
+
+            for (const nextCategory of expectedTransitions) {
+                const newCard = card.levelUpCategory();
+
+                expect(newCard.category).toBe(nextCategory);
             }
 
-            expect(card.category).toBe(Category.SEVENTH);
+            expect(card.levelUpCategory).toHaveBeenCalledTimes(7);
+            expect(card.category).toBe(Category.DONE);
         });
 
-        it('should throw error when category is already at the max level', () => {
+        it('should throw error when category is already DONE', () => {
             const card = new Card(
                 "1",
-                Category.SEVENTH,
+                Category.DONE,
                 "Who is that Pokemon ?",
                 "It's PIKACHU !",
                 "Gaming"
             );
 
-            expect(() => card.levelUpCategory()).toThrow('Category is already at the maximum level');
+            expect(() => card.levelUpCategory()).toThrow('Card category is already DONE');
         });
     });
 
@@ -95,15 +100,16 @@ describe('Card', () => {
             expect(card.levelUpCategory).not.toHaveBeenCalled();
         });
 
-        it('should throw an error if the category is already at SEVENTH and the answer is correct', () => {
+        it('should throw an error if the category is already DONE', () => {
             const card = new Card(
                 "1",
-                Category.SEVENTH,
+                Category.DONE,
                 "Question?",
                 "Answer",
                 "Tag"
             );
-            expect(() => card.answerQuestion(true)).toThrow('Category is already at the maximum level');
+
+            expect(() => card.answerQuestion(true)).toThrow('Card category is already DONE');
         });
     });
 });

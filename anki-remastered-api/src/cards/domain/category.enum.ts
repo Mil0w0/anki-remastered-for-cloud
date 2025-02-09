@@ -5,7 +5,8 @@ export enum Category {
     FOURTH = 'FOURTH',
     FIFTH = 'FIFTH',
     SIXTH = 'SIXTH',
-    SEVENTH = 'SEVENTH'
+    SEVENTH = 'SEVENTH',
+    DONE = 'DONE'
 }
 
 export function getCategoryDelayInDays(category: Category): number {
