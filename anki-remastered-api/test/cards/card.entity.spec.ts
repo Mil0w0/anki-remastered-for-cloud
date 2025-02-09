@@ -94,5 +94,16 @@ describe('Card', () => {
             expect(card.resetCategory).toHaveBeenCalled();
             expect(card.levelUpCategory).not.toHaveBeenCalled();
         });
+
+        it('should throw an error if the category is already at SEVENTH and the answer is correct', () => {
+            const card = new Card(
+                "1",
+                Category.SEVENTH,
+                "Question?",
+                "Answer",
+                "Tag"
+            );
+            expect(() => card.answerQuestion(true)).toThrow('Category is already at the maximum level');
+        });
     });
 });
