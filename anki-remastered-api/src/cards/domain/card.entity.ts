@@ -1,8 +1,16 @@
-import { Category } from "./category.enum";
+import {Category} from "./category.enum";
 
 export class Card {
-    constructor(public id: string, public category: Category, public question: string, public answer: string, public tag: string) {
-    }
+
+    public lastResponseDate: Date | null = null;
+
+    constructor(
+        public id: string,
+        public category: Category,
+        public question: string,
+        public answer: string,
+        public tag: string
+    ) {}
 
     /**
      * Level up the category of the card
