@@ -9,10 +9,22 @@ export class QuizzService {
 
     async getEligibleCards() {
         const cards = await this.cardService.getAllCards();
-        return cards.filter(
-            card => card.lastResponseDate === null
-                || (card.lastResponseDate < LocalDateUtils.yesterday() && (card.category === Category.FIRST || card.category === Category.SECOND))
-                || (card.lastResponseDate < LocalDateUtils.daysAgo(4) && card.category === Category.THIRD)
+        return cards.filter(card => {
+                // If never answered, eligible
+                if (!card.lastResponseDate) {
+                    return true;
+                }
+                switch (card.category) {
+                    case Category.FIRST:
+                        return card.lastResponseDate <= LocalDateUtils.yesterday();
+                    case Category.SECOND:
+                        return card.lastResponseDate <= LocalDateUtils.daysAgo(2);
+                    case Category.THIRD:
+                        return card.lastResponseDate <= LocalDateUtils.daysAgo(4);
+                    default:
+                        return false;
+                }
+            }
         );
     }
 }
