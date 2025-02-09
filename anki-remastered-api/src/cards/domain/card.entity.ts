@@ -10,7 +10,8 @@ export class Card {
         public question: string,
         public answer: string,
         public tag: string
-    ) {}
+    ) {
+    }
 
     /**
      * Level up the category of the card
@@ -36,4 +37,8 @@ export class Card {
 
         return this;
     }
-}  
+
+    resetCategory() : void {
+        this.category = Category.FIRST;
+    }
+}
