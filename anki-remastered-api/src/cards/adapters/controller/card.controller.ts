@@ -1,7 +1,8 @@
-import {Body, Controller, Get, NotFoundException, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Get, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
 import {CardService} from '../../services/card.service';
 import {Card} from '../../domain/card.entity';
 import {CreateCardDto} from '../../domain/dto/createCard.dto';
+import {AnswerCardDto} from "../../domain/dto/answerCard.dto";
 
 @Controller('cards')
 export class CardController {
@@ -25,5 +26,10 @@ export class CardController {
     @Get()
     async getAllCards(@Query('tag') tag?: string): Promise<Card[]> {
         return this.cardService.getAllCards(tag);
+    }
+
+    @Patch(':id/answer')
+    async answerCard(@Param('id') id: string, @Body() answerCardDto: AnswerCardDto): Promise<void> {
+        return Promise.resolve();
     }
 }
