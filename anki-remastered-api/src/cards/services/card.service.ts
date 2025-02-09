@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {v4 as uuidv4} from 'uuid';
 import {Card} from '../domain/card.entity';
 import {CardRepository} from '../domain/ports/card.repository';
@@ -26,5 +26,15 @@ export class CardService {
             return cards.then(cards => cards.filter(card => card.tag === tag));
         }
         return cards;
+    }
+
+    async answerCard(cardId: string, correct: boolean): Promise<Card | undefined> {
+        const card = await this.cardRepository.findById(cardId);
+
+        if (!card) {
+            throw new NotFoundException(`Card with id ${cardId} not found`);
+        }
+
+        return card;
     }
 }
