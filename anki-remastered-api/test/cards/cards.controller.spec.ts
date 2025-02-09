@@ -5,6 +5,7 @@ import {CreateCardDto} from '../../src/cards/domain/dto/createCard.dto';
 import {Card} from '../../src/cards/domain/card.entity';
 import {Category} from "../../src/cards/domain/category.enum";
 import {AnswerCardDto} from "../../src/cards/domain/dto/answerCard.dto";
+import {NotFoundException} from "@nestjs/common";
 
 describe('CardController', () => {
     let cardController: CardController;
@@ -152,13 +153,41 @@ describe('CardController', () => {
     });
 
     describe('answerCard', () => {
+
         it('should return 204', async () => {
             const cardId = 'card-123';
             const body: AnswerCardDto = {isValid: true};
 
+            jest.spyOn(cardService, 'answerCard').mockImplementation(async () => {
+                return Promise.resolve();
+            });
+
             const result = await cardController.answerCard(cardId, body);
 
             expect(result).toBeUndefined();
+        });
+
+        it('should call answerCard on found card', async () => {
+            const cardId = 'card-123';
+            const body: AnswerCardDto = {isValid: true};
+
+            jest.spyOn(cardService, 'answerCard').mockImplementation(async () => {
+                return Promise.resolve();
+            });
+
+            const result = await cardController.answerCard(cardId, body);
+
+            expect(cardService.answerCard).toHaveBeenCalledWith('card-123', true);
+            expect(result).toBeUndefined();
+        });
+
+        it('should throw NotFoundException if card does not exist', async () => {
+            const cardId = 'card-123';
+            const body: AnswerCardDto = {isValid: true};
+
+            await expect(
+                cardController.answerCard(cardId, body),
+            ).rejects.toThrow(NotFoundException);
         });
     });
 });

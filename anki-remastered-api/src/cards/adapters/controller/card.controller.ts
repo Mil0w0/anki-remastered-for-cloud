@@ -1,4 +1,4 @@
-import {Body, Controller, Get, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
 import {CardService} from '../../services/card.service';
 import {Card} from '../../domain/card.entity';
 import {CreateCardDto} from '../../domain/dto/createCard.dto';
@@ -29,7 +29,8 @@ export class CardController {
     }
 
     @Patch(':id/answer')
+    @HttpCode(204)
     async answerCard(@Param('id') id: string, @Body() answerCardDto: AnswerCardDto): Promise<void> {
-        return Promise.resolve();
+        return this.cardService.answerCard(id, answerCardDto.isValid);
     }
 }
