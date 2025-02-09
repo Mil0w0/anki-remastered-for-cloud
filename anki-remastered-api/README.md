@@ -61,6 +61,52 @@ After you have started the api with `npm run start:dev` you can run the command:
 docker run --rm -v ./test/http:/workdir jetbrains/intellij-http-client -D test-suite.http
 ```
 
+## Documentation
+
+The documentation is generated with Swagger, you can access it by going to `http://localhost:3000/api` when the server is running
+
+## Architecture
+
+The architecture of the project is based on the Hexagonal Architecture.
+### To visualize the architecture, you can use the following mermaid diagram, install the extension in your IDE or use the online editor: https://mermaid-js.github.io/mermaid-live-editor/
+
+```mermaid
+flowchart TD
+%% Inbound Adapters (Controllers)
+    subgraph Inbound_Adapters [Inbound Adapters]
+        CC["CardController<br/>(REST)"]
+        QC["QuizzController<br/>(REST)"]
+    end
+
+%% Application Services
+    subgraph Application_Services [Application Services]
+        CS[CardService]
+        QS[QuizzService]
+    end
+
+%% Domain Layer (Core Business Logic)
+    subgraph Domain [Domain]
+        CE[Card Entity]
+        CAT[Category Enum]
+        CRP["CardRepository<br/>(Port)"]
+    end
+
+%% Outbound Adapters (Persistence, etc.)
+    subgraph Outbound_Adapters [Outbound Adapters]
+        CRI["CardRepositoryImpl<br/> (TypeORM)"]
+    end
+
+%% Connections
+    CC --> CS
+    QC --> QS
+    QS --> CS
+    CS --> CRP
+    CRI --> CRP
+%% Domain internal relationships
+    CRP --- CE
+    CE --- CAT
+```
+
 ## Authors
 
 ### - Loriane HILDERAL
