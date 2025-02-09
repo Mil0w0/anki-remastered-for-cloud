@@ -45,5 +45,21 @@ describe('QuizzService', () => {
             expect(result[0]).toEqual(cards[0]);
         });
 
+        // if the card last response date is today, it should not be returned
+        it('should not return card with last response date today', async () => {
+            const card = new Card(
+                "1",
+                Category.FIRST,
+                "Who is that Pokemon ?",
+                "It's PIKACHU !",
+                "Gaming"
+            );
+            card.lastResponseDate = new Date();
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+            expect(result).toEqual([]);
+        });
+
     });
 });
