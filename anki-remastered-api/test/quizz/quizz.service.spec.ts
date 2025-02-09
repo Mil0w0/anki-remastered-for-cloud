@@ -77,6 +77,11 @@ describe('QuizzService', () => {
               ${32}   | ${Category.SEVENTH}    | ${false}   | ${'32 days ago for SEVENTH -> not returned'}
               ${64}   | ${Category.SEVENTH}    | ${true}    | ${'64 days ago for SEVENTH -> returned'}
               ${128}  | ${Category.SEVENTH}    | ${true}    | ${'128 days ago for SEVENTH -> returned'}
+              
+              // Category.DONE checks
+              ${64}   | ${Category.DONE}       | ${false}   | ${'64 days ago for DONE -> not returned'}$
+              ${128}  | ${Category.DONE}       | ${false}   | ${'128 days ago for DONE -> not returned'}$
+              ${null} | ${Category.DONE}       | ${false}   | ${'no last response date for DONE -> not returned'}$
             `(
             '($description) -> daysAgo=$daysAgo, category=$category => expected=$expected',
             async ({daysAgo, category, expected}) => {
