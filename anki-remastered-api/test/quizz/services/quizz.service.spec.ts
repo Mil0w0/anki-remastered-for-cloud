@@ -165,5 +165,21 @@ describe('QuizzService', () => {
 
             expect(updatedResult).toEqual([card]);
         });
+
+        it('should be able to get eligible cards for a given day', async () => {
+            const card = new Card(
+                '1',
+                Category.FIRST,
+                'Q1',
+                'A1',
+                'Tag1'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCardsAtDate(LocalDateUtils.daysAhead(1));
+
+            expect(result).toEqual([card]);
+        });
     });
 });
