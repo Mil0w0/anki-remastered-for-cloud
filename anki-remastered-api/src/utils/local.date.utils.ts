@@ -53,4 +53,12 @@ export class LocalDateUtils {
         newDate.setDate(date.getDate() - days);
         return newDate;
     }
+
+    static getLocalDate(date: Date): Date {
+        return new Date(date.toLocaleDateString());
+    }
+
+    static getLocalISOString(date: Date): string {
+        return this.getLocalDate(date).toISOString();
+    }
 }

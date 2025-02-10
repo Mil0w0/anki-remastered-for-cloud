@@ -9,7 +9,7 @@ export class QuizzService {
     constructor(private readonly cardService: CardService, private readonly quizzRepository: QuizzRepository) {
     }
 
-    async getEligibleCardsAtDate(date: Date): Promise<Card[]> {
+    async getEligibleCardsAtDate(quizzDate: Date): Promise<Card[]> {
         const cards: Card[] = await this.cardService.getAllCards();
         const eligibleCards = cards.filter(card => {
                 // if the card is done, it is never eligible
@@ -21,13 +21,13 @@ export class QuizzService {
                 if (!card.lastResponseDate) {
                     return true;
                 }
-                return card.lastResponseDate <= LocalDateUtils.subtractDays(date, getCategoryDelayInDays(card.category));
+                return card.lastResponseDate <= LocalDateUtils.subtractDays(quizzDate, getCategoryDelayInDays(card.category));
             }
         );
 
-        const alreadyGeneratedQuizz = this.quizzRepository.getQuizzForUser("1");
+        const alreadyGeneratedQuizz = this.quizzRepository.getQuizzForUser("1", quizzDate);
         if (!alreadyGeneratedQuizz) {
-            this.quizzRepository.saveQuizzForUser("1", cards);
+            this.quizzRepository.saveQuizzForUser("1", quizzDate, cards);
             return eligibleCards;
         }
         // we return the intersection of the eligible cards and the cards that were already generated

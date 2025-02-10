@@ -4,7 +4,6 @@ import {CardService} from "../../../src/cards/services/card.service";
 import {CardRepository} from "../../../src/cards/domain/ports/card.repository";
 import {Category} from "../../../src/cards/domain/category.enum";
 import {LocalDateUtils} from "../../../src/utils/local.date.utils";
-import {CardRepositoryImpl} from "../../../src/cards/adapters/db/card.repository.impl";
 import {InMemoryQuizzRepository} from "../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
 
 
@@ -213,7 +212,7 @@ describe('QuizzService', () => {
 
             cardRepository.findAll.mockResolvedValue([card]);
 
-            const result = await quizzService.getEligibleCards();
+            const result = await quizzService.getEligibleCardsAtDate(LocalDateUtils.today());
 
             expect(result).toEqual([card]);
 
@@ -227,7 +226,7 @@ describe('QuizzService', () => {
 
             cardRepository.findAll.mockResolvedValue([card, card2]);
 
-            const updatedResultToday = await quizzService.getEligibleCardsAtDate(LocalDateUtils.daysAhead(1));
+            const updatedResultToday = await quizzService.getEligibleCardsAtDate(LocalDateUtils.today());
 
             expect(updatedResultToday).toEqual([card]);
 
