@@ -181,5 +181,59 @@ describe('QuizzService', () => {
 
             expect(result).toEqual([card]);
         });
+
+        it('should return the same cards if no new cards have been created or answered since yesterday / last quizz', async () => {
+            const card = new Card(
+                '1',
+                Category.FIRST,
+                'Q1',
+                'A1',
+                'Tag1'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const resultToday = await quizzService.getEligibleCardsAtDate(LocalDateUtils.today());
+
+            expect(resultToday).toEqual([card]);
+
+            const resultTomorrow = await quizzService.getEligibleCardsAtDate(LocalDateUtils.daysAhead(1));
+
+            expect(resultTomorrow).toEqual([card]);
+        });
+
+        it('should not return newly created cards if a quizz has already has been generated today but should return it tomorrow', async () => {
+            const card = new Card(
+                '1',
+                Category.FIRST,
+                'Q1',
+                'A1',
+                'Tag1'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+
+            expect(result).toEqual([card]);
+
+            const card2 = new Card(
+                '2',
+                Category.FIRST,
+                'Q2',
+                'A2',
+                'Tag2'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card, card2]);
+
+            const updatedResultToday = await quizzService.getEligibleCardsAtDate(LocalDateUtils.daysAhead(1));
+
+            expect(updatedResultToday).toEqual([card]);
+
+            const updatedResultTomorrow = await quizzService.getEligibleCardsAtDate(LocalDateUtils.daysAhead(1));
+
+            expect(updatedResultTomorrow).toEqual([card, card2]);
+        });
     });
 });
