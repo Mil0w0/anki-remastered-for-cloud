@@ -6,6 +6,7 @@ import {CreateCardDto} from '../domain/dto/createCard.dto';
 import {Category} from "../domain/category.enum";
 import {QuizzService} from "../../quizz/services/quizz.service";
 import {QuizzValidationService} from "../../quizz/services/quizz.validation.service";
+import {LocalDateUtils} from "../../utils/local.date.utils";
 
 @Injectable()
 export class CardService {
@@ -32,17 +33,22 @@ export class CardService {
         return cards;
     }
 
-    async answerCard(cardId: string, isCorrect: boolean): Promise<void> {
+    async answerCardAtDate(cardId: string, isCorrect: boolean, quizzDate:Date): Promise<void> {
         const card = await this.cardRepository.findById(cardId);
         if (!card) {
             throw new NotFoundException(`Card with id ${cardId} not found`);
         }
 
-        if (!this.quizzValidationService.isCardInQuizz(card)) {
+        if (!this.quizzValidationService.isCardInQuizz(card, quizzDate)) {
             throw new Error(`Card with id ${cardId} is not in the current quizz`);
         }
 
         card.answerQuestion(isCorrect);
         await this.cardRepository.save(card);
+    }
+
+    async answerCard(cardId: string, isCorrect: boolean): Promise<void> {
+       return this.answerCardAtDate(cardId, isCorrect, LocalDateUtils.today());
+
     }
 }

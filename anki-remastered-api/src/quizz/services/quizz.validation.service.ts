@@ -7,8 +7,8 @@ import {LocalDateUtils} from "../../utils/local.date.utils";
 export class QuizzValidationService {
     constructor(private readonly quizzRepository: QuizzRepository) {}
 
-    isCardInQuizz(card: Card): boolean {
-        const quizz = this.quizzRepository.getQuizzForUser("1", LocalDateUtils.today());
+    isCardInQuizz(card: Card, quizzDate:Date): boolean {
+        const quizz = this.quizzRepository.getQuizzForUser("1", quizzDate);
         return !!quizz?.map(card => card.id).includes(card.id);
     }
 }

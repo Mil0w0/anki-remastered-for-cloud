@@ -110,10 +110,10 @@ describe('CardService', () => {
         it('should be possible possible to answer a card a given day', async () => {
             const cardId = 'card-123';
             const today = LocalDateUtils.today();
-            const twoDaysAhead = LocalDateUtils.addDays(today, 2);
+            const twoDaysAhead = LocalDateUtils.daysAhead(2);
             const body: AnswerCardDto = {
                 isValid: true,
-                answeringDate: twoDaysAhead
+                quizzDate: twoDaysAhead
             };
 
             const card = new Card(
@@ -132,7 +132,7 @@ describe('CardService', () => {
 
             card.answerQuestion = jest.fn();
 
-            await cardService.answerCardAtDate(cardId, body.isValid, body.answeringDate);
+            await cardService.answerCardAtDate(cardId, body.isValid, body.quizzDate as Date);
             expect(card.answerQuestion).toHaveBeenCalledWith(true);
             expect(cardRepository.save).toHaveBeenCalledWith(card);
 
