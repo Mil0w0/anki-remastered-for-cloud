@@ -4,6 +4,8 @@ import {CardService} from "../../../src/cards/services/card.service";
 import {CardRepository} from "../../../src/cards/domain/ports/card.repository";
 import {Category} from "../../../src/cards/domain/category.enum";
 import {LocalDateUtils} from "../../../src/utils/local.date.utils";
+import {CardRepositoryImpl} from "../../../src/cards/adapters/db/card.repository.impl";
+import {InMemoryQuizzRepository} from "../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
 
 
 describe('QuizzService', () => {
@@ -15,7 +17,8 @@ describe('QuizzService', () => {
         // mock the card repository
         cardRepository = {save: jest.fn(), findById: jest.fn(), findAll: jest.fn()};
         const cardService = new CardService(cardRepository);
-        quizzService = new QuizzService(cardService);
+        const quizzRepository = new InMemoryQuizzRepository();
+        quizzService = new QuizzService(cardService, quizzRepository);
     });
 
     describe('getEligibleCards', () => {
@@ -131,6 +134,36 @@ describe('QuizzService', () => {
 
             // We expect only the eligible ones: eligibleCardA and eligibleCardC
             expect(result).toEqual([eligibleCardA, eligibleCardC]);
+        });
+
+        it('should not return newly created cards if a quizz has already has been generated today', async () => {
+            const card = new Card(
+                '1',
+                Category.FIRST,
+                'Q1',
+                'A1',
+                'Tag1'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card]);
+
+            const result = await quizzService.getEligibleCards();
+
+            expect(result).toEqual([card]);
+
+            const card2 = new Card(
+                '2',
+                Category.FIRST,
+                'Q2',
+                'A2',
+                'Tag2'
+            );
+
+            cardRepository.findAll.mockResolvedValue([card, card2]);
+
+            const updatedResult = await quizzService.getEligibleCards();
+
+            expect(updatedResult).toEqual([card]);
         });
     });
 });
