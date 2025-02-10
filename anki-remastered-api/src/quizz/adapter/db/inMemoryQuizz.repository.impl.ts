@@ -16,4 +16,12 @@ export class InMemoryQuizzRepository implements QuizzRepository {
     saveQuizzForUser(userId: string, quizzDate: Date, quizzData: Card[]): void {
         this.userQuizzes.set(LocalDateUtils.getLocalISOString(quizzDate), quizzData);
     }
+
+    getCardByIdAndQuizzDateForUser(userId: string, quizzDate:Date, cardId: string): Card | undefined {
+        const quizz = this.getQuizzForUser(userId, quizzDate);
+        if (!quizz) {
+            return undefined;
+        }
+        return quizz.find(card => card.id === cardId);
+    }
 }

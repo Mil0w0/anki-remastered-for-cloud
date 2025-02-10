@@ -8,7 +8,7 @@ export class QuizzValidationService {
     constructor(private readonly quizzRepository: QuizzRepository) {}
 
     isCardInQuizz(card: Card, quizzDate:Date): boolean {
-        const quizz = this.quizzRepository.getQuizzForUser("1", quizzDate);
-        return !!quizz?.map(card => card.id).includes(card.id);
+        const cardFromQuizz = this.quizzRepository.getCardByIdAndQuizzDateForUser("1", quizzDate, card.id);
+        return cardFromQuizz !== undefined;
     }
 }
