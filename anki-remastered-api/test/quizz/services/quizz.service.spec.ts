@@ -5,6 +5,7 @@ import {CardRepository} from "../../../src/cards/domain/ports/card.repository";
 import {Category} from "../../../src/cards/domain/category.enum";
 import {LocalDateUtils} from "../../../src/utils/local.date.utils";
 import {InMemoryQuizzRepository} from "../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
+import {QuizzValidationService} from "../../../src/quizz/services/quizz.validation.service";
 
 
 describe('QuizzService', () => {
@@ -15,8 +16,8 @@ describe('QuizzService', () => {
         jest.clearAllMocks();
         // mock the card repository
         cardRepository = {save: jest.fn(), findById: jest.fn(), findAll: jest.fn()};
-        const cardService = new CardService(cardRepository);
         const quizzRepository = new InMemoryQuizzRepository();
+        const cardService = new CardService(cardRepository, new QuizzValidationService(quizzRepository));
         quizzService = new QuizzService(cardService, quizzRepository);
     });
 

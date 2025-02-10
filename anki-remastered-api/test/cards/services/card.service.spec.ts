@@ -1,13 +1,16 @@
-import { CardService } from '../../../src/cards/services/card.service';
-import { CardRepository } from '../../../src/cards/domain/ports/card.repository';
-import { Card } from '../../../src/cards/domain/card.entity';
-import { Category } from '../../../src/cards/domain/category.enum';
+import {CardService} from '../../../src/cards/services/card.service';
+import {CardRepository} from '../../../src/cards/domain/ports/card.repository';
+import {Card} from '../../../src/cards/domain/card.entity';
+import {Category} from '../../../src/cards/domain/category.enum';
 import {NotFoundException} from "@nestjs/common";
 import {AnswerCardDto} from "../../../src/cards/domain/dto/answerCard.dto";
+import {InMemoryQuizzRepository} from "../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
+import {QuizzValidationService} from "../../../src/quizz/services/quizz.validation.service";
 
 describe('CardService', () => {
     let cardService: CardService;
     let cardRepository: jest.Mocked<CardRepository>;
+    let quizzValidationService: QuizzValidationService;
 
     beforeEach(() => {
         cardRepository = {
@@ -16,7 +19,11 @@ describe('CardService', () => {
             findAll: jest.fn()
         } as unknown as jest.Mocked<CardRepository>;
 
-        cardService = new CardService(cardRepository);
+        quizzValidationService = new QuizzValidationService(new InMemoryQuizzRepository());
+        cardService = new CardService(
+            cardRepository,
+            quizzValidationService
+        );
     });
 
     describe('answerCard', () => {
@@ -40,6 +47,7 @@ describe('CardService', () => {
             jest.spyOn(existingCard, 'answerQuestion');
 
             cardRepository.findById.mockResolvedValue(existingCard);
+            quizzValidationService.isCardInQuizz = jest.fn().mockReturnValue(true);
 
             await cardService.answerCard('card-123', true);
 
@@ -56,6 +64,7 @@ describe('CardService', () => {
             );
 
             cardRepository.findById.mockResolvedValue(existingCard);
+            quizzValidationService.isCardInQuizz = jest.fn().mockReturnValue(true);
 
             await cardService.answerCard('card-123', true);
 
@@ -73,6 +82,7 @@ describe('CardService', () => {
             jest.spyOn(existingCard, 'answerQuestion');
 
             cardRepository.findById.mockResolvedValue(existingCard);
+            quizzValidationService.isCardInQuizz = jest.fn().mockReturnValue(true);
 
             await cardService.answerCard('card-456', false);
 
@@ -93,7 +103,7 @@ describe('CardService', () => {
                 'SomeTag'
             ));
 
-            await expect(cardService.answerCard(cardId, body.isValid)).rejects.toThrowError('Card is not in the quizz of the day');
+            await expect(cardService.answerCard(cardId, body.isValid)).rejects.toThrowError('Card with id card-123 is not in the current quizz');
         });
     });
 

@@ -4,11 +4,15 @@ import {Card} from '../domain/card.entity';
 import {CardRepository} from '../domain/ports/card.repository';
 import {CreateCardDto} from '../domain/dto/createCard.dto';
 import {Category} from "../domain/category.enum";
+import {QuizzService} from "../../quizz/services/quizz.service";
+import {QuizzValidationService} from "../../quizz/services/quizz.validation.service";
 
 @Injectable()
 export class CardService {
-    constructor(@Inject('CardRepository') private cardRepository: CardRepository) {
-    }
+    constructor(
+        @Inject('CardRepository') private cardRepository: CardRepository,
+        private readonly quizzValidationService: QuizzValidationService
+    ) {}
 
     async createCard(createCardDto: CreateCardDto): Promise<Card> {
         const card = new Card(uuidv4(), Category.FIRST, createCardDto.question, createCardDto.answer, createCardDto.tag);
@@ -32,6 +36,10 @@ export class CardService {
         const card = await this.cardRepository.findById(cardId);
         if (!card) {
             throw new NotFoundException(`Card with id ${cardId} not found`);
+        }
+
+        if (!this.quizzValidationService.isCardInQuizz(card)) {
+            throw new Error(`Card with id ${cardId} is not in the current quizz`);
         }
 
         card.answerQuestion(isCorrect);

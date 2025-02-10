@@ -6,6 +6,8 @@ import {Card} from '../../../../src/cards/domain/card.entity';
 import {Category} from "../../../../src/cards/domain/category.enum";
 import {AnswerCardDto} from "../../../../src/cards/domain/dto/answerCard.dto";
 import {NotFoundException} from "@nestjs/common";
+import {QuizzValidationService} from "../../../../src/quizz/services/quizz.validation.service";
+import {InMemoryQuizzRepository} from "../../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
 
 describe('CardController', () => {
     let cardController: CardController;
@@ -15,7 +17,7 @@ describe('CardController', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         cardRepository = {save: jest.fn(), findById: jest.fn(), findAll: jest.fn()};
-        cardService = new CardService(cardRepository);
+        cardService = new CardService(cardRepository, new QuizzValidationService(new InMemoryQuizzRepository()));
         cardController = new CardController(cardService);
     });
 
