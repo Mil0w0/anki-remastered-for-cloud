@@ -6,6 +6,7 @@ import {NotFoundException} from "@nestjs/common";
 import {AnswerCardDto} from "../../../src/cards/domain/dto/answerCard.dto";
 import {InMemoryQuizzRepository} from "../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
 import {QuizzValidationService} from "../../../src/quizz/services/quizz.validation.service";
+import {LocalDateUtils} from "../../../src/utils/local.date.utils";
 
 describe('CardService', () => {
     let cardService: CardService;
@@ -104,6 +105,39 @@ describe('CardService', () => {
             ));
 
             await expect(cardService.answerCard(cardId, body.isValid)).rejects.toThrowError('Card with id card-123 is not in the current quizz');
+        });
+
+        it('should be possible possible to answer a card a given day', async () => {
+            const cardId = 'card-123';
+            const today = LocalDateUtils.today();
+            const twoDaysAhead = LocalDateUtils.addDays(today, 2);
+            const body: AnswerCardDto = {
+                isValid: true,
+                answeringDate: twoDaysAhead
+            };
+
+            const card = new Card(
+                cardId,
+                Category.FIRST,
+                'Question?',
+                'Answer',
+                'SomeTag'
+            );
+
+            cardRepository.findById.mockResolvedValue(card);
+            // mock isCardInQuizz for today to return true and for the day of the card to return false
+            quizzValidationService.isCardInQuizz = jest.fn().mockImplementation((id, date) => {
+                return date === twoDaysAhead;
+            });
+
+            card.answerQuestion = jest.fn();
+
+            await cardService.answerCardAtDate(cardId, body.isValid, body.answeringDate);
+            expect(card.answerQuestion).toHaveBeenCalledWith(true);
+            expect(cardRepository.save).toHaveBeenCalledWith(card);
+
+
+            expect(cardService.answerCardAtDate(cardId, body.isValid, today)).rejects.toThrowError('Card with id card-123 is not in the current quizz');
         });
     });
 
