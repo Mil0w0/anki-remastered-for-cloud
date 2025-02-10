@@ -3,6 +3,7 @@ import { CardRepository } from '../../../src/cards/domain/ports/card.repository'
 import { Card } from '../../../src/cards/domain/card.entity';
 import { Category } from '../../../src/cards/domain/category.enum';
 import {NotFoundException} from "@nestjs/common";
+import {AnswerCardDto} from "../../../src/cards/domain/dto/answerCard.dto";
 
 describe('CardService', () => {
     let cardService: CardService;
@@ -77,6 +78,22 @@ describe('CardService', () => {
 
             expect(existingCard.answerQuestion).toHaveBeenCalledWith(false);
             expect(cardRepository.save).toHaveBeenCalledWith(existingCard);
+        });
+
+        it('should throw and error if the card is not in the quizz of the day', async () => {
+            const cardId = 'card-123';
+            const body: AnswerCardDto = {isValid: true};
+
+
+            cardRepository.findById.mockResolvedValue(new Card(
+                cardId,
+                Category.FIRST,
+                'Question?',
+                'Answer',
+                'SomeTag'
+            ));
+
+            await expect(cardService.answerCard(cardId, body.isValid)).rejects.toThrowError('Card is not in the quizz of the day');
         });
     });
 
