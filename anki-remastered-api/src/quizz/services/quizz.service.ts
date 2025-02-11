@@ -3,16 +3,18 @@ import {getCategoryDelayInDays} from "../../cards/domain/category.enum";
 import {LocalDateUtils} from "../../utils/local.date.utils";
 import {QuizzRepository} from "../domain/ports/quizz.repository";
 import {Card} from "../../cards/domain/card.entity";
+import {Inject} from "@nestjs/common";
 
 export class QuizzService {
 
     FAKE_USER_ID = "1";
 
-    constructor(private readonly cardService: CardService, private readonly quizzRepository: QuizzRepository) {
+    constructor(@Inject('CardService') private readonly cardService: CardService, @Inject('QuizzRepository') private readonly quizzRepository: QuizzRepository) {
     }
 
     async getEligibleCardsAtDate(quizzDate: Date): Promise<Card[]> {
         const cards: Card[] = await this.cardService.getAllCards();
+        console.log(cards);
         const eligibleCards = cards.filter(card => {
                 // if the card is done, it is never eligible
                 if (card.isDone()) {

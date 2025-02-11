@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Inject, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
 import {CardService} from '../../services/card.service';
 import {Card} from '../../domain/card.entity';
 import {CreateCardDto} from '../../domain/dto/createCard.dto';
@@ -7,12 +7,17 @@ import {LocalDateUtils} from "../../../utils/local.date.utils";
 
 @Controller('cards')
 export class CardController {
-    constructor(private readonly cardService: CardService) {
+    constructor(@Inject('CardService')private readonly cardService: CardService) {
     }
 
     @Post()
     async createCard(@Body() createCardDto: CreateCardDto): Promise<Card> {
         return this.cardService.createCard(createCardDto);
+    }
+
+    @Get()
+    async getAllCards(@Query('tag') tag?: string): Promise<Card[]> {
+        return this.cardService.getAllCards(tag);
     }
 
     @Get(':id')
@@ -22,11 +27,6 @@ export class CardController {
             throw new NotFoundException(`Card with id ${id} not found`);
         }
         return card;
-    }
-
-    @Get()
-    async getAllCards(@Query('tag') tag?: string): Promise<Card[]> {
-        return this.cardService.getAllCards(tag);
     }
 
     @Patch(':id/answer')

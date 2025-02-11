@@ -5,8 +5,8 @@ import {UtilsModule} from "./utils/utils.module";
 
 @Module({
     imports: [
-        CardModule,
         QuizzModule,
+        CardModule,
         UtilsModule
     ],
 })
