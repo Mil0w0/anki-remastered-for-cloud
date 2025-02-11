@@ -41,7 +41,7 @@ describe('QuizzService', () => {
          * "expected" -> boolean, whether we expect it to be returned
          * "description" -> optional short description
          */
-        it.each`
+        test.each`
               daysAgo | category               | expected   | description
               // Newly created card
               ${null} | ${Category.FIRST}      | ${true}    | ${'no last response date -> should be returned'}

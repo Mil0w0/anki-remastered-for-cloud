@@ -42,7 +42,7 @@ describe('QuizzController', () => {
                 ),
             ];
 
-            jest.spyOn(quizzService, 'getEligibleCards').mockResolvedValue(mockCards);
+            jest.spyOn(quizzService, 'getEligibleCardsAtDate').mockResolvedValue(mockCards);
 
             const result = await quizzController.getQuizz();
 

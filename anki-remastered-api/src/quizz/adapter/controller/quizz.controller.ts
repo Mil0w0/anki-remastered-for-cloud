@@ -9,11 +9,12 @@ export class QuizzController {
     constructor(
         private readonly quizzService: QuizzService,
         private readonly dateService: DateService
-    ) {}
+    ) {
+    }
 
     @Get()
     async getQuizz(@Query('date') date?: string): Promise<Card[]> {
         const quizzDate = this.dateService.parseDate(date);
-        return this.quizzService.getEligibleCards();
+        return this.quizzService.getEligibleCardsAtDate(quizzDate);
     }
 }

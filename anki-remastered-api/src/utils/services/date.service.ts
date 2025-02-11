@@ -11,6 +11,6 @@ export class DateService {
         if (!date) {
             return LocalDateUtils.today();
         }
-        return LocalDateUtils.of(date);
+        return LocalDateUtils.fromString(date);
     }
 }
