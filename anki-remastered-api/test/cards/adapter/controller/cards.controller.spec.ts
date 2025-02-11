@@ -8,6 +8,7 @@ import {AnswerCardDto} from "../../../../src/cards/domain/dto/answerCard.dto";
 import {NotFoundException} from "@nestjs/common";
 import {QuizzValidationService} from "../../../../src/quizz/services/quizz.validation.service";
 import {InMemoryQuizzRepository} from "../../../../src/quizz/adapter/db/inMemoryQuizz.repository.impl";
+import {LocalDateUtils} from "../../../../src/utils/local.date.utils";
 
 describe('CardController', () => {
     let cardController: CardController;
@@ -160,7 +161,7 @@ describe('CardController', () => {
             const cardId = 'card-123';
             const body: AnswerCardDto = {isValid: true};
 
-            jest.spyOn(cardService, 'answerCard').mockImplementation(async () => {
+            jest.spyOn(cardService, 'answerCardAtDate').mockImplementation(async () => {
                 return Promise.resolve();
             });
 
@@ -173,13 +174,13 @@ describe('CardController', () => {
             const cardId = 'card-123';
             const body: AnswerCardDto = {isValid: true};
 
-            jest.spyOn(cardService, 'answerCard').mockImplementation(async () => {
+            jest.spyOn(cardService, 'answerCardAtDate').mockImplementation(async () => {
                 return Promise.resolve();
             });
 
             const result = await cardController.answerCard(cardId, body);
 
-            expect(cardService.answerCard).toHaveBeenCalledWith('card-123', true);
+            expect(cardService.answerCardAtDate).toHaveBeenCalledWith('card-123', true, LocalDateUtils.today());
             expect(result).toBeUndefined();
         });
 

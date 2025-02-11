@@ -3,6 +3,7 @@ import {CardService} from '../../services/card.service';
 import {Card} from '../../domain/card.entity';
 import {CreateCardDto} from '../../domain/dto/createCard.dto';
 import {AnswerCardDto} from "../../domain/dto/answerCard.dto";
+import {LocalDateUtils} from "../../../utils/local.date.utils";
 
 @Controller('cards')
 export class CardController {
@@ -31,6 +32,6 @@ export class CardController {
     @Patch(':id/answer')
     @HttpCode(204)
     async answerCard(@Param('id') id: string, @Body() answerCardDto: AnswerCardDto): Promise<void> {
-        return this.cardService.answerCard(id, answerCardDto.isValid);
+        return this.cardService.answerCardAtDate(id, answerCardDto.isValid, answerCardDto.quizzDate || LocalDateUtils.today());
     }
 }

@@ -1,4 +1,6 @@
 import {IsBoolean, IsDate, IsNotEmpty, IsOptional} from "class-validator";
+import {Type} from "class-transformer";
+import {LocalDateUtils} from "../../../utils/local.date.utils";
 
 export class AnswerCardDto {
 
@@ -6,9 +8,9 @@ export class AnswerCardDto {
     @IsBoolean()
     isValid: boolean;
 
-    @IsDate()
     @IsOptional()
-    quizzDate?: Date = new Date();
+    @IsDate()
+    quizzDate?: Date;
 
     constructor(isValid: boolean) {
         this.isValid = isValid;
