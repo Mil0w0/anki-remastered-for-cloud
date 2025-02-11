@@ -82,6 +82,7 @@ flowchart TD
     subgraph Application_Services [Application Services]
         CS[CardService]
         QS[QuizzService]
+        QVS[QuizzValidationService]
     end
 
 %% Domain Layer (Core Business Logic)
@@ -89,22 +90,41 @@ flowchart TD
         CE[Card Entity]
         CAT[Category Enum]
         CRP["CardRepository<br/>(Port)"]
+        QRP["QuizzRepository<br/>(Port)"]
     end
 
+%% Utility Services
+    subgraph Utils [Utility Services]
+        LU["LocalDateUtils"]
+        DS["DateService"]
+    end
+    
 %% Outbound Adapters (Persistence, etc.)
     subgraph Outbound_Adapters [Outbound Adapters]
-        CRI["CardRepositoryImpl<br/> (TypeORM)"]
+        CRI["CardRepositoryImpl<br/>(InMemory)"]
+        QRI["InMemoryQuizzRepository<br/>(InMemory)"]
     end
-
+    
 %% Connections
     CC --> CS
     QC --> QS
     QS --> CS
+    QS --> QRP
+    QVS --> QRP
+    QVS --> CS
     CS --> CRP
     CRI --> CRP
+    QRI --> QRP
 %% Domain internal relationships
     CRP --- CE
+    QRP --- CE
     CE --- CAT
+%% Utility Connections
+    QS --> LU
+    QVS --> LU
+    QRI --> LU
+    DS --> LU
+    QC --> DS
 ```
 
 ## Authors
