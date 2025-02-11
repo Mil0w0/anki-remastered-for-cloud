@@ -38,7 +38,7 @@ describe('CardController', () => {
 
             expect(createdCard).toEqual(expectedResult);
             expect(typeof createdCard.id).toBe('string');
-            expect(createdCard.id).toHaveLength(36);
+            expect(createdCard.id).toHaveLength(36); //uuid length
 
 
             expect(cardRepository.save).toHaveBeenCalledWith(
@@ -107,7 +107,7 @@ describe('CardController', () => {
 
             (cardRepository.findAll as jest.Mock).mockResolvedValue(expectedCards);
             const cards = await cardController.getAllCards();
-            expect(cards).toHaveLength(2);
+            expect(cards).toHaveLength(expectedCards.length);
             expect(cards).toEqual(expectedCards);
 
             expect(cardRepository.findAll).toHaveBeenCalled();
