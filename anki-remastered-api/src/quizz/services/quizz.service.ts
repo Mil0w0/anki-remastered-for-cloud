@@ -6,6 +6,8 @@ import {Card} from "../../cards/domain/card.entity";
 
 export class QuizzService {
 
+    FAKE_USER_ID = "1";
+
     constructor(private readonly cardService: CardService, private readonly quizzRepository: QuizzRepository) {
     }
 
@@ -25,9 +27,9 @@ export class QuizzService {
             }
         );
 
-        const alreadyGeneratedQuizz = this.quizzRepository.getQuizzForUser("1", quizzDate);
+        const alreadyGeneratedQuizz = this.quizzRepository.getQuizzForUser(this.FAKE_USER_ID, quizzDate);
         if (!alreadyGeneratedQuizz) {
-            this.quizzRepository.saveQuizzForUser("1", quizzDate, cards);
+            this.quizzRepository.saveQuizzForUser(this.FAKE_USER_ID, quizzDate, cards);
             return eligibleCards;
         }
         // we return the intersection of the eligible cards and the cards that were already generated
