@@ -1,0 +1,166 @@
+# Scenario: Test E2E complet pour le système Leitner
+
+### 1) Créer une première carte valide (tag "Teamwork")
+POST http://localhost:3000/cards
+Content-Type: application/json
+
+{
+  "question": "What is pair programming?",
+  "answer": "A practice to work in pair on same computer.",
+  "tag": "Teamwork"
+}
+
+> {%
+    client.test("Création carte 1 => statut 201", function () {
+        client.assert(response.status === 201, "Statut attendu 201, obtenu " + response.status);
+    });
+    client.test("La carte 1 est en catégorie FIRST", function () {
+        client.assert(response.body.category === "FIRST", "Catégorie attendue FIRST, obtenue " + response.body.category);
+    });
+    // Stocker l'ID de la carte 1 pour les étapes suivantes
+    client.global.set("card1Id", response.body.id);
+%}
+
+### 2) Créer une deuxième carte valide (tag "Testing")
+POST http://localhost:3000/cards
+Content-Type: application/json
+
+{
+  "question": "What is unit testing?",
+  "answer": "A way to test individual units of code.",
+  "tag": "Testing"
+}
+
+> {%
+    client.test("Création carte 2 => statut 201", function () {
+        client.assert(response.status === 201, "Statut attendu 201, obtenu " + response.status);
+    });
+    client.test("La carte 2 est en catégorie FIRST", function () {
+        client.assert(response.body.category === "FIRST", "Catégorie attendue FIRST, obtenue " + response.body.category);
+    });
+    // Stocker l'ID de la carte 2
+    client.global.set("card2Id", response.body.id);
+%}
+
+### 3) Récupérer toutes les cartes (sans filtre)
+GET http://localhost:3000/cards
+
+> {%
+    client.test("Récupération de toutes les cartes => statut 200", function () {
+        client.assert(response.status === 200, "Statut attendu 200, obtenu " + response.status);
+    });
+    client.test("Les cartes 1 et 2 sont présentes", function () {
+        const cardsIds = response.body.map(card => card.id);
+        client.assert(cardsIds.includes(client.global.get("card1Id")), "La carte 1 n'est pas présente");
+        client.assert(cardsIds.includes(client.global.get("card2Id")), "La carte 2 n'est pas présente");
+    });
+%}
+
+### 4) Récupérer les cartes filtrées par le tag "Teamwork"
+GET http://localhost:3000/cards?tags=[Teamwork]
+
+> {%
+    client.test("Récupération par tag 'Teamwork' => statut 200", function () {
+        client.assert(response.status === 200, "Statut attendu 200, obtenu " + response.status);
+    });
+    client.test("La carte avec tag 'Teamwork' est présente", function () {
+        const card = response.body.find(c => c.id === client.global.get("card1Id"));
+        client.assert(card !== undefined, "La carte 1 (Teamwork) n'a pas été trouvée");
+    });
+    client.test("La carte avec tag 'Testing' n'est pas retournée", function () {
+        const card = response.body.find(c => c.id === client.global.get("card2Id"));
+        client.assert(card === undefined, "La carte 2 (Testing) ne devrait pas être présente dans ce filtre");
+    });
+%}
+
+### 5) Récupérer le quizz du jour (pour aujourd'hui)
+GET http://localhost:3000/cards/quizz
+
+> {%
+    client.test("Récupération du quizz du jour => statut 200", function () {
+        client.assert(response.status === 200, "Statut attendu 200, obtenu " + response.status);
+    });
+    client.test("Le quizz retourne au moins une carte", function () {
+        client.assert(response.body.length > 0, "Aucune carte retournée pour le quizz du jour");
+    });
+%}
+
+### 6) Répondre correctement à la carte 1 (elle devrait passer de FIRST à SECOND)
+PATCH http://localhost:3000/cards/{{card1Id}}/answer
+Content-Type: application/json
+
+{
+  "isValid": true
+}
+
+> {%
+    client.test("Réponse correcte pour carte 1 => statut 204", function () {
+        client.assert(response.status === 204, "Statut attendu 204, obtenu " + response.status);
+    });
+%}
+
+### 7) Répondre incorrectement à la carte 2 (elle doit rester ou revenir en FIRST)
+PATCH http://localhost:3000/cards/{{card2Id}}/answer
+Content-Type: application/json
+
+{
+  "isValid": false
+}
+
+> {%
+    client.test("Réponse incorrecte pour carte 2 => statut 204", function () {
+        client.assert(response.status === 204, "Statut attendu 204, obtenu " + response.status);
+    });
+%}
+
+### 8) Vérifier via une nouvelle récupération que les catégories ont bien évolué
+GET http://localhost:3000/cards
+
+> {%
+    client.test("Vérification des catégories après réponses", function () {
+        const card1 = response.body.find(c => c.id === client.global.get("card1Id"));
+        const card2 = response.body.find(c => c.id === client.global.get("card2Id"));
+        client.assert(card1.category === "SECOND", "La carte 1 devrait être en catégorie SECOND, obtenue: " + card1.category);
+        client.assert(card2.category === "FIRST", "La carte 2 devrait rester en catégorie FIRST, obtenue: " + card2.category);
+    });
+%}
+
+### 9) Tenter de répondre à une carte inexistante (attendre 404)
+PATCH http://localhost:3000/cards/non-existent-card-id/answer
+Content-Type: application/json
+
+{
+  "isValid": true
+}
+
+> {%
+    client.test("Répondre à une carte inexistante => statut 404", function () {
+        client.assert(response.status === 404, "Statut attendu 404 pour carte inexistante, obtenu " + response.status);
+    });
+%}
+
+### 10) Envoyer une requête PATCH avec un corps invalide (propriété 'isValid' manquante, attendez 400)
+PATCH http://localhost:3000/cards/{{card1Id}}/answer
+Content-Type: application/json
+
+{
+  "notValid": true
+}
+
+> {%
+    client.test("Réponse avec corps invalide => statut 400", function () {
+        client.assert(response.status === 400, "Statut attendu 400 pour corps invalide, obtenu " + response.status);
+    });
+%}
+
+### 11) Récupérer le quizz pour une date spécifique (ex. une date future)
+GET http://localhost:3000/cards/quizz?date=2030-01-01
+
+> {%
+    client.test("Récupération du quizz pour une date future => statut 200", function () {
+        client.assert(response.status === 200, "Statut attendu 200, obtenu " + response.status);
+    });
+    client.test("Le corps de la réponse est un tableau (possiblement vide)", function () {
+        client.assert(Array.isArray(response.body), "Le corps de la réponse doit être un tableau");
+    });
+%}
