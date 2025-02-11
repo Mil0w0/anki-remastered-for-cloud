@@ -61,4 +61,11 @@ export class LocalDateUtils {
     static getLocalISOString(date: Date): string {
         return this.getLocalDate(date).toISOString();
     }
+
+    static of(dateStr: string) {
+        const date = new Date(dateStr);
+        date.setHours(0, 0, 0, 0);
+        return date;
+
+    }
 }

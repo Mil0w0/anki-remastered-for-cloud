@@ -3,6 +3,7 @@ import {QuizzService} from "../../../../src/quizz/services/quizz.service";
 import {Card} from "../../../../src/cards/domain/card.entity";
 import {Category} from "../../../../src/cards/domain/category.enum";
 import {QuizzController} from "../../../../src/quizz/adapter/controller/quizz.controller";
+import {DateService} from "../../../../src/utils/services/date.service";
 
 describe('QuizzController', () => {
     let quizzController: QuizzController;
@@ -11,7 +12,10 @@ describe('QuizzController', () => {
     beforeEach(async () => {
         jest.clearAllMocks();
         quizzService = {getEligibleCards: jest.fn()} as unknown as QuizzService;
-        quizzController = new QuizzController(quizzService);
+        quizzController = new QuizzController(
+            quizzService,
+            new DateService()
+        );
     });
 
     describe('getQuizz', () => {
