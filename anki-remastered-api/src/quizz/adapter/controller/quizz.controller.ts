@@ -1,4 +1,3 @@
-// quizz.controller.ts
 import {Controller, Get, Query} from '@nestjs/common';
 import {QuizzService} from "../../services/quizz.service";
 import {Card} from "../../../cards/domain/card.entity";
