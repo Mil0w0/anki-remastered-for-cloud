@@ -1,8 +1,9 @@
-import {use, useEffect, useState} from "react";
+import {CSSProperties, use, useEffect, useState} from "react";
 import {ResponseCard} from "./CreateCardForm.tsx";
 import AnkiCard from "./Card.tsx";
+import {SearchInput} from "./SearchInput.tsx";
 
-const cardListStyles = {
+const cardListStyles : CSSProperties = {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
@@ -12,13 +13,15 @@ const cardListStyles = {
 }
 export default function CardsList() {
 
-    const [cards, setCards] = useState<ResponseCard[]>([{id: "1", question: "What is the capital of France?", answer: "Paris", tag: "Geography", category: "General Knowledge"}, {id: "1", question: "What is the capital of France?", answer: "Paris", tag: "Geography", category: "General Knowledge"}]);
+   const [cards, setCards] = useState<ResponseCard[]>([]);
+   const [searchQuery, setSearchQuery] = useState("");
 
-  /*  useEffect(() => {
+   useEffect(() => {
         async function fetchCards() {
+            const queryParams =  searchQuery.length > 0 ? "?tag="+searchQuery : "";
             let API_URL = "http://localhost:3000";
             try {
-                let response = await fetch(`${API_URL}/cards`);
+                let response = await fetch(`${API_URL}/cards${queryParams}`);
                 let data: ResponseCard[] = await response.json();
                 return data;
             }
@@ -28,14 +31,15 @@ export default function CardsList() {
             }
         }
         fetchCards().then((data) => setCards(data));
-    }, []);*/
+    }, [searchQuery]);
 
     return (
         <div>
-            <h2>Cards List</h2>
+            <h2>All your cards</h2>
+            <SearchInput setSearchQuery={setSearchQuery} />
             <div id={"cardList"} style={cardListStyles}>
                 {cards.map((card, index) => (
-                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category} question={card.question} cardIndex={index+1} totalCards={cards.length}/>
+                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category} question={card.question} cardIndex={index+1} totalCards={cards.length} canAnswer={true}/>
                 ))}
             </div>
         </div>

@@ -7,7 +7,7 @@ export const formStyle : CSSProperties = {
     padding: "1rem",
     margin: "1rem",
     minHeight: "30vh",
-    maxWidth:"50vw"
+    maxWidth:"30vw"
 }
 
 export const paperStyle : CSSProperties = {
