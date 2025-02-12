@@ -25,10 +25,10 @@ export class CardService {
         return this.cardRepository.findById(id);
     }
 
-    async getAllCards(tag?: string): Promise<Card[]> {
+    async getAllCards(tags?: string[]): Promise<Card[]> {
         const cards = this.cardRepository.findAll();
-        if (tag) {
-            return cards.then(cards => cards.filter(card => card.tag === tag));
+        if (tags) {
+            return cards.then(cards => cards.filter(card => tags.includes(card.tag)));
         }
         return cards;
     }

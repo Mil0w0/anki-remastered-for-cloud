@@ -147,9 +147,42 @@ describe('CardController', () => {
             ];
 
             (cardRepository.findAll as jest.Mock).mockResolvedValue(expectedCards);
-            const cards = await cardController.getAllCards("Gaming");
+            const cards = await cardController.getAllCards(["Gaming"]);
             expect(cards).toHaveLength(1);
             expect(cards).toEqual([expectedCards[0]]);
+
+            expect(cardRepository.findAll).toHaveBeenCalled();
+        });
+
+        it('should accept an array of tags', async () => {
+            const expectedCards = [
+                new Card(
+                    "1",
+                    Category.FIRST,
+                    "Who is that Pokemon ?",
+                    "It's PIKACHU !",
+                    "Gaming"
+                ),
+                new Card(
+                    "2",
+                    Category.FIRST,
+                    "What is the moon made of ?",
+                    "Lotta Cheese",
+                    "Astrology"
+                ),
+                new Card(
+                    "3",
+                    Category.FIRST,
+                    "What is the moon made of ?",
+                    "Lotta Cheese",
+                    "OtherSubject"
+                ),
+            ];
+
+            (cardRepository.findAll as jest.Mock).mockResolvedValue(expectedCards);
+            const cards = await cardController.getAllCards(["Gaming", "Astrology"]);
+            expect(cards).toHaveLength(2);
+            expect(cards).toEqual(expectedCards.slice(0, 2));
 
             expect(cardRepository.findAll).toHaveBeenCalled();
         });

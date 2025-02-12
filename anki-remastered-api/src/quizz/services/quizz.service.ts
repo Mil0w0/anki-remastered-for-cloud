@@ -14,7 +14,6 @@ export class QuizzService {
 
     async getEligibleCardsAtDate(quizzDate: Date): Promise<Card[]> {
         const cards: Card[] = await this.cardService.getAllCards();
-        console.log(cards);
         const eligibleCards = cards.filter(card => {
                 // if the card is done, it is never eligible
                 if (card.isDone()) {

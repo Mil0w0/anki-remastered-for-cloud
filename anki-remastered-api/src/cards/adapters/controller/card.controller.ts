@@ -16,8 +16,8 @@ export class CardController {
     }
 
     @Get()
-    async getAllCards(@Query('tag') tag?: string): Promise<Card[]> {
-        return this.cardService.getAllCards(tag);
+    async getAllCards(@Query('tags') tags?: string[]): Promise<Card[]> {
+        return this.cardService.getAllCards(tags);
     }
 
     @Get(':id')

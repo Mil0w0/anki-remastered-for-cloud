@@ -138,6 +138,9 @@ describe('CardService', () => {
 
 
             await expect(cardService.answerCardAtDate(cardId, body.isValid, today)).rejects.toThrowError('Card with id card-123 is not in the current quizz');
+
+            await cardService.answerCardAtDate(cardId, body.isValid, twoDaysAhead);
+            expect(card.answerQuestion).toHaveBeenCalledWith(true);
         });
     });
 

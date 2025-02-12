@@ -57,7 +57,7 @@ GET http://localhost:3000/cards
 %}
 
 ### 4) Récupérer les cartes filtrées par le tag "Teamwork"
-GET http://localhost:3000/cards?tags=[Teamwork]
+GET http://localhost:3000/cards?tags=Teamwork
 
 > {%
     client.test("Récupération par tag 'Teamwork' => statut 200", function () {
