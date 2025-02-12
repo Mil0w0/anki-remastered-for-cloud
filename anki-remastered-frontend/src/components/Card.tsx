@@ -12,10 +12,12 @@ type AnkiProps = {
     cardIndex: number,
     totalCards: number,
     canAnswer: boolean,
+    setCards: Function,
+    cards: ResponseCard[]
 }
-export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer}: AnkiProps){
+export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards}: AnkiProps){
 
-    console.log(category);
+    console.log(id, category);
     const [showAnswer, setShowAnswer] = useState(false);
     const [userAnswer, setUserAnswer] = useState("");
     const [error, setError] = useState("");
@@ -32,7 +34,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({isValid: isValid}),
+                body: JSON.stringify({isValid: isValid, date: new Date().toISOString()}),
             });
 
             if (!response.ok) {
@@ -44,12 +46,15 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     }
 
     function submitUserAnswer() {
-        console.log("sent")
         updateCardCategory(userAnswer === answer).then(() => {
-            console.log("User submitted answer : " + userAnswer === answer);
+            console.log("User isValid answer : " + userAnswer === answer);
             setError(userAnswer === answer ? "C'est ça bg" : "Wrong looser!");
+            //setCards(cards.filter(card => card.id !== id));
+        }).catch((e) => {
+            setError('Failed to update the card' + error);
         });
     }
+
     function toggleAnswer() {
         setShowAnswer(!showAnswer);
     }
@@ -65,7 +70,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
             </Typography>
             <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Tag: {tag}</Typography>
             <FormControl>
-                <TextField name="userAnswer" placeholder="" label="Your answer" onChange={handleUserAnswer}></TextField>
+                {canAnswer && <TextField name="userAnswer" placeholder="" label="Your answer" onChange={handleUserAnswer}></TextField>}
             </FormControl>
             <Typography id={"cardAnswerRevealed"} style={{color: "green"}} variant="body2">
                 {showAnswer && "Answer: " + answer}
@@ -76,7 +81,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
         </CardContent>
         <CardActions>
             {canAnswer && <Button size="small" onClick={submitUserAnswer}>Submit</Button>}
-            <Button size="small" onClick={toggleAnswer}>Reveal Answer</Button>
+            {!canAnswer && <Button size="small" onClick={toggleAnswer}>Reveal Answer</Button> }
         </CardActions>
     </Card>
     );

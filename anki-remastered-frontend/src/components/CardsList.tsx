@@ -3,7 +3,7 @@ import {ResponseCard} from "./CreateCardForm.tsx";
 import AnkiCard from "./Card.tsx";
 import {SearchInput} from "./SearchInput.tsx";
 
-const cardListStyles : CSSProperties = {
+export const cardListStyles : CSSProperties = {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
@@ -39,7 +39,7 @@ export default function CardsList() {
             <SearchInput setSearchQuery={setSearchQuery} />
             <div id={"cardList"} style={cardListStyles}>
                 {cards.map((card, index) => (
-                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category} question={card.question} cardIndex={index+1} totalCards={cards.length} canAnswer={true}/>
+                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category} question={card.question} cardIndex={index+1} totalCards={cards.length} canAnswer={false} setCards={setCards} cards={cards}/>
                 ))}
             </div>
         </div>

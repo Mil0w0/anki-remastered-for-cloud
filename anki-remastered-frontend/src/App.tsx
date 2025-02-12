@@ -1,7 +1,7 @@
 import CreateCardForm from "./components/CreateCardForm.tsx";
+import {CSSProperties,} from "react";
+import {QuizzOfTheDay} from "./components/QuizzOfTheDay.tsx";
 import CardsList from "./components/CardsList.tsx";
-import {CSSProperties} from "react";
-import {Button} from "@mui/material";
 
 const headerStyle: CSSProperties = {
     backgroundColor: "black",
@@ -10,18 +10,21 @@ const headerStyle: CSSProperties = {
 const mainStyle = {
     margin: "2rem",
 }
+
 function App() {
     document.body.style.margin = "0";
-  return (
-    <div>
-        <div style={headerStyle}></div>
-        <div id="main" style={mainStyle}>
-            <Button variant="contained" color="primary">Quizz of the day</Button>
-            <CardsList />
-            <CreateCardForm />
+
+    return (
+        <div>
+            <div style={headerStyle}></div>
+            <div id="main" style={mainStyle}>
+
+                <QuizzOfTheDay/>
+                <CardsList/>
+                <CreateCardForm/>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default App
