@@ -1,5 +1,6 @@
 import {Card} from "../../../src/cards/domain/card.entity";
 import {Category} from "../../../src/cards/domain/category.enum";
+import {LocalDateUtils} from "../../../src/utils/local.date.utils";
 
 describe('Card', () => {
 
@@ -110,6 +111,27 @@ describe('Card', () => {
             );
 
             expect(() => card.answerQuestion(true)).toThrow('Card category is already DONE');
+        });
+
+        it('should set the date of the last test as today no matter the answer', () => {
+            const card = new Card(
+                "1",
+                Category.FIRST,
+                "Question?",
+                "Answer",
+                "Tag"
+            );
+            jest.spyOn(card, 'levelUpCategory');
+            jest.spyOn(card, 'resetCategory');
+
+            card.answerQuestion(true);
+
+            expect(card.lastResponseDate).toEqual(LocalDateUtils.today());
+
+            card.lastResponseDate = null;
+            card.answerQuestion(false);
+
+            expect(card.lastResponseDate).toEqual(LocalDateUtils.today());
         });
     });
 });

@@ -7,6 +7,7 @@ export class CardRepositoryImpl implements CardRepository {
     private cards: Map<string, Card> = new Map();
 
     async save(card: Card): Promise<void> {
+        console.log(card);
         this.cards.set(card.id, card);
     }
 

@@ -1,4 +1,4 @@
-import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {v4 as uuidv4} from 'uuid';
 import {Card} from '../domain/card.entity';
 import {CardRepository} from '../domain/ports/card.repository';
@@ -40,7 +40,7 @@ export class CardService {
         }
 
         if (!this.quizzValidationService.isCardInQuizz(card, quizzDate)) {
-            throw new Error(`Card with id ${cardId} is not in the current quizz`);
+            throw new ForbiddenException(`Card with id ${cardId} is not in the current quizz`);
         }
 
         card.answerQuestion(isCorrect);
@@ -49,6 +49,5 @@ export class CardService {
 
     async answerCard(cardId: string, isCorrect: boolean): Promise<void> {
        return this.answerCardAtDate(cardId, isCorrect, LocalDateUtils.today());
-
     }
 }

@@ -1,4 +1,5 @@
 import {Category} from "./category.enum";
+import {LocalDateUtils} from "../../utils/local.date.utils";
 
 export class Card {
 
@@ -63,6 +64,8 @@ export class Card {
         } else {
             this.resetCategory();
         }
+
+        this.lastResponseDate = LocalDateUtils.today();
     }
 
     /**
