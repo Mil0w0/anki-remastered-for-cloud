@@ -1,7 +1,8 @@
-import {Button, Card, CardActions, CardContent, FormControl, TextField, Typography} from "@mui/material";
+import {Alert, Button, Card, CardActions, CardContent, FormControl, TextField, Typography} from "@mui/material";
 import {ChangeEvent, useState} from "react";
 import {formStyle} from "../styles/CreateComponentFormStyles.ts";
 import {ResponseCard} from "./CreateCardForm.tsx";
+import AnswerCardValidation from "./AnswerCardValidationDialog.tsx";
 
 type AnkiProps = {
     question: string,
@@ -14,13 +15,15 @@ type AnkiProps = {
     canAnswer: boolean,
     setCards: Function,
     cards: ResponseCard[]
+    setError: Function
+    setOpen: Function,
 }
-export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards}: AnkiProps){
+export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen}: AnkiProps){
 
     console.log(id, category);
     const [showAnswer, setShowAnswer] = useState(false);
     const [userAnswer, setUserAnswer] = useState("");
-    const [error, setError] = useState("");
+    const [openDialog, setOpenDialog] = useState(false);
 
     function handleUserAnswer(e: ChangeEvent<HTMLInputElement>){
         setUserAnswer(e.target.value);
@@ -38,20 +41,26 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
             });
 
             if (!response.ok) {
+                setOpen(true);
                 setError('Failed to update the card s category : ' + response.statusText);
             }
         }catch (error) {
+            setOpen(true);
             setError('Failed to update the card' + error);
         }
     }
 
-    function submitUserAnswer() {
-        updateCardCategory(userAnswer === answer).then(() => {
-            console.log("User isValid answer : " + userAnswer === answer);
-            setError(userAnswer === answer ? "C'est ça bg" : "Wrong looser!");
-            //setCards(cards.filter(card => card.id !== id));
+    function openAnswerValidationDialog() {
+        setOpenDialog(true);
+    }
+
+    function validateUserAnswer(isValid: boolean) {
+        updateCardCategory(isValid).then(() => {
+            setCards(cards.filter(card => card.id !== id));
+            setUserAnswer("");
         }).catch((e) => {
-            setError('Failed to update the card' + error);
+            setError('Failed to update the card' + e);
+            setOpen(true);
         });
     }
 
@@ -60,7 +69,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     }
 
     return (
-    <Card sx={{ maxWidth: 275, marginRight: "5vw"}}>
+    <Card sx={{ maxWidth: 275, marginRight: "5vw", marginTop: "4vh" }}>
         <CardContent>
             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                 Card {cardIndex} / {totalCards}
@@ -75,14 +84,14 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
             <Typography id={"cardAnswerRevealed"} style={{color: "green"}} variant="body2">
                 {showAnswer && "Answer: " + answer}
             </Typography>
-            <Typography id={"cardErrorUpdated"} style={{color: "red"}} variant="body2">
-                {error}
-            </Typography>
         </CardContent>
         <CardActions>
-            {canAnswer && <Button size="small" onClick={submitUserAnswer}>Submit</Button>}
+            {canAnswer && <Button size="small" onClick={openAnswerValidationDialog}>Submit</Button>}
             {!canAnswer && <Button size="small" onClick={toggleAnswer}>Reveal Answer</Button> }
         </CardActions>
+
+        <AnswerCardValidation openDialog={openDialog} setOpenDialog={setOpenDialog} cardAnswer={answer} userAnswer={userAnswer} validateUserAnswer={validateUserAnswer} />
+
     </Card>
     );
 }
