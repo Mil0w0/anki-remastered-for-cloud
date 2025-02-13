@@ -48,6 +48,19 @@ or if you want to have the coverage with it too
   npm run test:cov
 ```
 
+
+### To run api / http / e2e tests
+
+You can use the IntelliJ HTTP Client to run the tests in the `test/http` folder <br>
+You can also use the docker image provided by JetBrains to run the tests in the `test/http` folder <br>
+But you will need to have the docker image installed on your machine
+
+After you have started the api with `npm run start:dev` you can run the command:
+
+```bash
+docker run --rm -v ./test/http:/workdir jetbrains/intellij-http-client -D test-suite.http
+```
+
 ## Authors
 
 ### - Loriane HILDERAL

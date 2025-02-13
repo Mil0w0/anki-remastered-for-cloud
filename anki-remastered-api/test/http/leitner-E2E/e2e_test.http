@@ -100,7 +100,7 @@ Content-Type: application/json
 %}
 
 ### 7) Répondre incorrectement à la carte 2 (elle doit rester ou revenir en FIRST)
-PATCH http://localhost:3000/cards/6cbf271a-acf2-4929-a279-8a20cd0a6188/answer
+PATCH http://localhost:3000/cards/{{card2Id}}/answer
 Content-Type: application/json
 
 {

@@ -1,2 +1,5 @@
+### Run e2e test
+run leitner-E2E/e2e_test.http
+
 ### Run create card test
 run create-card/create_card_test.http
