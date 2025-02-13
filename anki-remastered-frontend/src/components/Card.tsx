@@ -17,8 +17,9 @@ type AnkiProps = {
     cards: ResponseCard[]
     setError: Function
     setOpen: Function,
+    answerDate: string,
 }
-export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen}: AnkiProps){
+export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen, answerDate}: AnkiProps){
 
     console.log(id, category);
     const [showAnswer, setShowAnswer] = useState(false);
@@ -29,7 +30,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
         setUserAnswer(e.target.value);
     }
 
-    async function updateCardCategory(isValid: boolean) {
+    async function updateCardCategory(isValid: boolean, answerDate: string) {
         try {
             let API_URL = "http://localhost:3000";
             let response = await fetch(`${API_URL}/cards/${id}/answer`, {
@@ -37,7 +38,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({isValid: isValid, date: new Date().toISOString()}),
+                body: JSON.stringify({isValid: isValid, date: answerDate}),
             });
 
             if (!response.ok) {
@@ -55,7 +56,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     }
 
     function validateUserAnswer(isValid: boolean) {
-        updateCardCategory(isValid).then(() => {
+        updateCardCategory(isValid, answerDate).then(() => {
             setCards(cards.filter(card => card.id !== id));
             setUserAnswer("");
         }).catch((e) => {
