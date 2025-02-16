@@ -1,7 +1,7 @@
 import {IconButton, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 
-export function SearchInput({setSearchQuery}) {
+export function SearchInput({setSearchQuery}: {setSearchQuery: Function}) {
     return (
     <form>
         <TextField

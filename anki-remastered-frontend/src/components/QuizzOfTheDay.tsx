@@ -14,10 +14,10 @@ export function QuizzOfTheDay() {
     const [quizzCards, setQuizzCards] = useState<ResponseCard[]>([]);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
-    const [quizzDate, setQuizDate] = useState(new Date(new Date().getTime() + 72 * 60 * 60 * 1000));
+    const [quizzDate, setQuizzDate] = useState(new Date());
 
     async function getQuizzOfTheDay() {
-        const queryParams = "?date=" + quizzDate.toISOString(); // TEST TMRW: new Date(new Date().getTime() + 48 * 60 * 60 * 1000).toISOString();
+        const queryParams = "?date=" + quizzDate.toISOString(); // TEST TMRW: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString();
         let API_URL = "http://localhost:3000";
         try {
             let response = await fetch(`${API_URL}/cards/quizz${queryParams}`);

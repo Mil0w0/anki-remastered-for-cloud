@@ -15,9 +15,9 @@ type AnkiProps = {
     canAnswer: boolean,
     setCards: Function,
     cards: ResponseCard[]
-    setError: Function
-    setOpen: Function,
-    answerDate: string,
+    setError?: Function
+    setOpen?: Function,
+    answerDate?: string,
 }
 export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen, answerDate}: AnkiProps){
 
