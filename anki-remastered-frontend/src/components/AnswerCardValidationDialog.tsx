@@ -26,7 +26,7 @@ export default function AnswerCardValidation({openDialog, setOpenDialog, userAns
                    Your answer : {userAnswer}
                 </DialogContentText>
                 <DialogContentText id="alert-dialog-description">
-                    The good answer :  {cardAnswer}
+                    The good answer : {cardAnswer}
                 </DialogContentText>
                 <DialogContentText id="alert-dialog-description">
                     Decision : you answer is {cardAnswer === userAnswer ? "" : "not"} valid
