@@ -72,6 +72,12 @@ The architecture of the project is based on the Hexagonal Architecture.
 
 ```mermaid
 flowchart TD
+
+%% Frontend
+    subgraph Frontend [Frontend]
+        SPA["SPA<br/>(REACT)"]
+    end
+
 %% Inbound Adapters (Controllers)
     subgraph Inbound_Adapters [Inbound Adapters]
         CC["CardController<br/>(REST)"]
@@ -82,7 +88,6 @@ flowchart TD
     subgraph Application_Services [Application Services]
         CS[CardService]
         QS[QuizzService]
-        QVS[QuizzValidationService]
     end
 
 %% Domain Layer (Core Business Logic)
@@ -90,41 +95,26 @@ flowchart TD
         CE[Card Entity]
         CAT[Category Enum]
         CRP["CardRepository<br/>(Port)"]
-        QRP["QuizzRepository<br/>(Port)"]
     end
 
-%% Utility Services
-    subgraph Utils [Utility Services]
-        LU["LocalDateUtils"]
-        DS["DateService"]
-    end
-    
 %% Outbound Adapters (Persistence, etc.)
     subgraph Outbound_Adapters [Outbound Adapters]
-        CRI["CardRepositoryImpl<br/>(InMemory)"]
-        QRI["InMemoryQuizzRepository<br/>(InMemory)"]
+        CRI["CardRepositoryImpl<br/> (TypeORM)"]
     end
-    
+
 %% Connections
     CC --> CS
     QC --> QS
     QS --> CS
-    QS --> QRP
-    QVS --> QRP
-    QVS --> CS
     CS --> CRP
     CRI --> CRP
-    QRI --> QRP
+    SPA -- REST API CALL --> CC
+    SPA -- REST API CALL --> QC
+    QC -- HTML RESPONSE (JSON) --> SPA
+    CC -- HTML RESPONSE (JSON) --> SPA
 %% Domain internal relationships
     CRP --- CE
-    QRP --- CE
     CE --- CAT
-%% Utility Connections
-    QS --> LU
-    QVS --> LU
-    QRI --> LU
-    DS --> LU
-    QC --> DS
 ```
 
 ## Authors
