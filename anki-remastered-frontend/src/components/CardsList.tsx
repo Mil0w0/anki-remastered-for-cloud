@@ -46,6 +46,7 @@ export default function CardsList() {
        setFilterCategory(filterParams);
    }
 
+
     return (
         <div>
             <h2>All your cards</h2>
@@ -55,10 +56,9 @@ export default function CardsList() {
            </div>
 
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                // @ts-ignore
                 value={filterCategory}
-                label="Age"
+                label="Category"
                 onChange={filterCardsByCategory}
             >
                 <MenuItem value={"ALL"}>ALL</MenuItem>
@@ -69,7 +69,10 @@ export default function CardsList() {
             </Select>
             <div id={"cardList"} style={cardListStyles}>
                 {cards.map((card, index) => (
-                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category} question={card.question} cardIndex={index+1} totalCards={cards.length} canAnswer={false} setCards={setCards} cards={cards}/>
+                    <AnkiCard id={card.id} tag={card.tag} answer={card.answer}
+                              category={card.category} question={card.question}
+                              cardIndex={index+1} totalCards={cards.length} canAnswer={false}
+                              setCards={setCards} cards={cards} setOpen={()=>{}} setError={()=>{}}/>
                 ))}
             </div>
         </div>

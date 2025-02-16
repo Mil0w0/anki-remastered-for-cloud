@@ -1,6 +1,5 @@
-import {Alert, Button, Card, CardActions, CardContent, FormControl, TextField, Typography} from "@mui/material";
+import { Button, Card, CardActions, CardContent, FormControl, TextField, Typography} from "@mui/material";
 import {ChangeEvent, useState} from "react";
-import {formStyle} from "../styles/CreateComponentFormStyles.ts";
 import {ResponseCard} from "./CreateCardForm.tsx";
 import AnswerCardValidation from "./AnswerCardValidationDialog.tsx";
 
@@ -15,13 +14,12 @@ type AnkiProps = {
     canAnswer: boolean,
     setCards: Function,
     cards: ResponseCard[]
-    setError?: Function
-    setOpen?: Function,
+    setError: Function
+    setOpen: Function,
     answerDate?: string,
 }
 export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen, answerDate}: AnkiProps){
 
-    console.log(id, category);
     const [showAnswer, setShowAnswer] = useState(false);
     const [userAnswer, setUserAnswer] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
@@ -56,7 +54,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     }
 
     function validateUserAnswer(isValid: boolean) {
-        updateCardCategory(isValid, answerDate).then(() => {
+        updateCardCategory(isValid, answerDate ? answerDate : new Date().toISOString()).then(() => {
             setCards(cards.filter(card => card.id !== id));
             setUserAnswer("");
         }).catch((e) => {
@@ -70,7 +68,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     }
 
     return (
-    <Card sx={{ maxWidth: 275, marginRight: "5vw", marginTop: "4vh" }}>
+    <Card key={id} sx={{ maxWidth: 275, marginRight: "5vw", marginTop: "4vh" }}>
         <CardContent>
             <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                 Card {cardIndex} / {totalCards}

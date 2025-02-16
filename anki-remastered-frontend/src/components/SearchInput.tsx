@@ -8,6 +8,7 @@ export function SearchInput({setSearchQuery}: {setSearchQuery: Function}) {
             id="search-bar"
             className="text"
             onInput={(e) => {
+                // @ts-ignore
                 setSearchQuery(e.target.value);
             }}
             label="Enter a tag to filter"
