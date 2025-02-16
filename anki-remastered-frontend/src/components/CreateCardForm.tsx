@@ -35,8 +35,8 @@ export default function CreateCardForm() {
 
     async function postCard(formData: CardFormData) {
         try {
-            let API_URL = "http://localhost:3000";
-            let response = await fetch(`${API_URL}/cards`, {
+            const API_URL = "http://localhost:3000";
+            const response = await fetch(`${API_URL}/cards`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ export default function CreateCardForm() {
             if (!response.ok) {
                 setError('Failed to create the card :' + response.statusText);
             }
-            let data: ResponseCard = await response.json();
+            const data: ResponseCard = await response.json();
             return data;
         }catch (error) {
             setError('Failed to create the card' + error);

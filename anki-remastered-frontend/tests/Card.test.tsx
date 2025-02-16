@@ -1,8 +1,6 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import '@testing-library/jest-dom';
 import AnkiCard from "../src/components/Card";
-import {CardProps} from "@mui/material";
-
 
 global.fetch = jest.fn(() =>
     Promise.resolve({

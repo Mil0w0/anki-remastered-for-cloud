@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {QuizzOfTheDay} from "../src/components/QuizzOfTheDay";
-import AnkiCard from "../src/components/Card";
 
 // Mock the AnkiCard component
 jest.mock('../src/components/Card', () => ({

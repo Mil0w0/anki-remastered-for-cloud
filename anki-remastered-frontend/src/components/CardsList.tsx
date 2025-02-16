@@ -21,10 +21,10 @@ export default function CardsList() {
    useEffect(() => {
         async function fetchCards() {
             const queryParams =  searchQuery.length > 0 ? "?tags="+searchQuery : "";
-            let API_URL = "http://localhost:3000";
+            const API_URL = "http://localhost:3000";
             try {
-                let response = await fetch(`${API_URL}/cards${queryParams}`);
-                let data: ResponseCard[] = await response.json();
+                const response = await fetch(`${API_URL}/cards${queryParams}`);
+                const data: ResponseCard[] = await response.json();
                 return data;
             }
             catch (error) {

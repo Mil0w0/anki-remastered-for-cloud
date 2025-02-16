@@ -18,15 +18,15 @@ export function QuizzOfTheDay() {
 
     async function getQuizzOfTheDay() {
         const queryParams = "?date=" + quizzDate.toISOString(); // TEST TMRW: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString();
-        let API_URL = "http://localhost:3000";
+        const API_URL = "http://localhost:3000";
         try {
-            let response = await fetch(`${API_URL}/cards/quizz${queryParams}`);
+            const response = await fetch(`${API_URL}/cards/quizz${queryParams}`);
             if(!response.ok) {
                 setError( "Failed to fetch quizz cards" + error);
                 setOpen(true);
                 return [];
             }
-            let cards: ResponseCard[] = await response.json();
+            const cards: ResponseCard[] = await response.json();
             if (cards.length === 0) {
                 setError("You already took the quizz today!");
                 setOpen(true);

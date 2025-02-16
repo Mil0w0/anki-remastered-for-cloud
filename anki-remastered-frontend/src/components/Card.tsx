@@ -30,8 +30,8 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
 
     async function updateCardCategory(isValid: boolean, answerDate: string) {
         try {
-            let API_URL = "http://localhost:3000";
-            let response = await fetch(`${API_URL}/cards/${id}/answer`, {
+            const API_URL = "http://localhost:3000";
+            const response = await fetch(`${API_URL}/cards/${id}/answer`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
