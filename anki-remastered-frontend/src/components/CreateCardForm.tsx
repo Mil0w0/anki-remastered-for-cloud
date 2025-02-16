@@ -1,7 +1,6 @@
-import Paper from '@mui/material/Paper'
 import {Button, FormControl, TextField} from "@mui/material";
-import {formStyle, paperStyle} from "../styles/CreateComponentFormStyles";
-import {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import {formStyle, } from "../styles/CreateComponentFormStyles";
+import {ChangeEvent, FormEvent, useState} from "react";
 
 type CardFormData = {
     question: string;
@@ -21,18 +20,13 @@ export type ResponseCard = {
     category: string;
 }
 
-/*type CreateCardFormProps = {
-    cardFormData: CardFormData
-}*/
-
 export default function CreateCardForm() {
 
     const [formData, setFormData] = useState<CardFormData>(initialCardFormData);
-    const [error, setError] = useState<string | null>("");
+    const [error, setError] = useState<string>("");
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log(name, value);
         setFormData((formData) => ({
             ...formData,
             [name]: value,
@@ -51,9 +45,8 @@ export default function CreateCardForm() {
             });
 
             if (!response.ok) {
-                setError('Failed to create the card' + response.statusText);
+                setError('Failed to create the card :' + response.statusText);
             }
-            console.log(response);
             let data: ResponseCard = await response.json();
             return data;
         }catch (error) {
@@ -67,10 +60,9 @@ export default function CreateCardForm() {
         try {
             // Call the API to create the card
             const newCard: ResponseCard = await postCard(formData);
-            if (!newCard.id) {
+            if (!newCard) {
                 return;
             }
-           // addToAllCards(newCard);
         } catch (error) {
             setError('Failed to create the card' + error);
         } finally {

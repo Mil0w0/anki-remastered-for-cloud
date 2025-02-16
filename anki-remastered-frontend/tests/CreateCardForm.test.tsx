@@ -3,8 +3,12 @@ import "@testing-library/jest-dom";
 import CreateCardForm from "../src/components/CreateCardForm";
 
 describe('Create card form component', () => {
-    it('renders the form', () => {
+
+    beforeEach(() => {
         render(<CreateCardForm />);
+    });
+
+    it('renders the form', () => {
 
         const questionInput = screen.getByLabelText("Question");
         const answerInput = screen.getByLabelText("Answer");
@@ -16,9 +20,7 @@ describe('Create card form component', () => {
 
     });
 
-   /* it('updates the card data from the form', () => {
-
-        render(<CreateCardForm />);
+    it('updates the card data from the form', () => {
 
         const questionInput = screen.getByLabelText("Question");
         const answerInput = screen.getByLabelText("Answer");
@@ -28,28 +30,20 @@ describe('Create card form component', () => {
         fireEvent.change(answerInput, { target: { value: 'Baby don\'t hurt me' } });
         fireEvent.change(tagINput, { target: { value: 'Songs' } });
 
-    });*/
+        expect(questionInput).toHaveValue('What is love?');
+        expect(answerInput).toHaveValue('Baby don\'t hurt me');
+        expect(tagINput).toHaveValue('Songs');
+    });
 
 
-
-    /*it('creates a card when the form is submitted', async () => {
-
-        let allCards : Card[] = [];
-        let addToAllCards = () => jest.fn();
-        let postCard = jest.fn();
-
-        let mockAnswerFromAPI = {
-            question: 'What is love?',
-            answer: 'Baby don\'t hurt me',
-            tag: 'Songs',
-            id: "aohfohMORGSI892UU4",
-            category: "FIRST"
-
-        }
-
-        postCard.mockResolvedValue(mockAnswerFromAPI); // Simulating a successful API response
-
-        render(<CreateCardForm allCards={allCards} addToAllCards={addToAllCards} />);
+    it('creates a card when the form is submitted', async () => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve({
+                }),
+            })
+        ) as jest.Mock;
 
         const questionInput = screen.getByLabelText("Question") as HTMLInputElement;
         const answerInput = screen.getByLabelText("Answer") as HTMLInputElement;
@@ -66,10 +60,32 @@ describe('Create card form component', () => {
         expect(answerInput.value).toBe('Baby don\'t hurt me');
         expect(tagINput.value).toBe('Songs');
 
-        await waitFor(() => expect(postCard).toHaveBeenCalledTimes(1));
-        await waitFor(() => expect(addToAllCards).toHaveBeenCalledWith(mockAnswerFromAPI));
+       expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
 
+    it('displays an error message when the form submit fails', async () => {
 
-    });*/
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                ok: false,
+                statusText: 'Bad Request',
+                json: () => Promise.resolve(),
+            })
+        ) as jest.Mock;
+
+        const questionInput = screen.getByLabelText("Question");
+        const answerInput = screen.getByLabelText("Answer");
+        const submitButton = screen.getByText("Create Card");
+
+        fireEvent.change(questionInput, { target: { value: 'Who is that pokemon?' } });
+        fireEvent.change(answerInput, { target: { value: 'Pikachu' } });
+
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('Failed to create the card :Bad Request')).toBeInTheDocument();
+        });
+    });
+
 
 });

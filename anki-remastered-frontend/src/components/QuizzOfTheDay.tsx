@@ -21,26 +21,35 @@ export function QuizzOfTheDay() {
         let API_URL = "http://localhost:3000";
         try {
             let response = await fetch(`${API_URL}/cards/quizz${queryParams}`);
+            if(!response.ok) {
+                setError( "Failed to fetch quizz cards" + error);
+                setOpen(true);
+                return [];
+            }
             let cards: ResponseCard[] = await response.json();
+            if (cards.length === 0) {
+                setError("You already took the quizz today!");
+                setOpen(true);
+            }
             return cards;
         }
         catch (error) {
             setError( "Failed to fetch quizz cards" + error);
-            setOpen(false);
+            setOpen(true);
             return [];
         }
     }
     return (
         <div>
             {open &&
-                <Alert style={alertStyle} variant="filled" severity="success" onClose={() => {setOpen(false)}}>
+                <Alert style={alertStyle} variant="filled" severity="warning" onClose={() => {setOpen(false)}}>
                     {error}
                 </Alert>
             }
             <Button variant="contained" color="primary"
                     onClick={() => getQuizzOfTheDay().then((data) => setQuizzCards(data))}>Quizz of the day</Button>
-            <h2>Quizz du {quizzDate.toISOString()}</h2>
-            <div id={"cardList"} style={cardListStyles}>
+            <h3>Quizz du {quizzDate.toISOString()}</h3>
+            <div id={"cardListFromQuizz"} style={cardListStyles}>
                 {quizzCards.map((card, index) => (
                     <AnkiCard id={card.id} tag={card.tag} answer={card.answer} category={card.category}
                               question={card.question} cardIndex={index + 1} totalCards={quizzCards.length}
