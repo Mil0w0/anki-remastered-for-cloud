@@ -12,7 +12,8 @@
 
 - `cp .env.exemple .env` to rename the .env.example file to .env and modify it
 
-- `docker-compose up -d `to start the database
+[//]: # (docker will be needed if database logic is implemented)
+[//]: # (- `docker-compose up -d `to start the database)
 
 ### Then you will need to fetch all dependencies needed to run the api, for that you can run
 `npm ci` that will fetch dependencies in the `package-lock.json`file
