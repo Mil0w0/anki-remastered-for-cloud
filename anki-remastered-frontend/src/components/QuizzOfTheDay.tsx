@@ -14,11 +14,12 @@ export function QuizzOfTheDay() {
     const [quizzCards, setQuizzCards] = useState<ResponseCard[]>([]);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
+    //@ts-ignore
     const [quizzDate, setQuizzDate] = useState(new Date());
 
     async function getQuizzOfTheDay() {
         const queryParams = "?date=" + quizzDate.toISOString(); // TEST TMRW: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString();
-        const API_URL = "http://localhost:3000";
+        const API_URL = "https://cloud-project-anki-remastered.ew.r.appspot.com";
         try {
             const response = await fetch(`${API_URL}/cards/quizz${queryParams}`);
             if(!response.ok) {

@@ -1,0 +1,18 @@
+runtime: nodejs22
+env: standard
+service: frontend
+handlers:
+  - url: /assets
+    static_dir: dist/assets
+
+  - url: /.*\.js
+    static_files: dist/
+    upload: dist/.*\.js
+
+  - url: /anki-icon.svg
+    static_files: dist/anki-icon.svg
+    upload: dist/anki-icon.svg
+
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html

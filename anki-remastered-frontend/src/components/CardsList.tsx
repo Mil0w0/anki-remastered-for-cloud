@@ -21,7 +21,7 @@ export default function CardsList() {
    useEffect(() => {
         async function fetchCards() {
             const queryParams =  searchQuery.length > 0 ? "?tags="+searchQuery : "";
-            const API_URL = "http://localhost:3000";
+            const API_URL = "https://cloud-project-anki-remastered.ew.r.appspot.com";
             try {
                 const response = await fetch(`${API_URL}/cards${queryParams}`);
                 const data: ResponseCard[] = await response.json();

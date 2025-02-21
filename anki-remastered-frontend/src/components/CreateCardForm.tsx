@@ -35,7 +35,7 @@ export default function CreateCardForm() {
 
     async function postCard(formData: CardFormData) {
         try {
-            const API_URL = "http://localhost:3000";
+            const API_URL = "https://cloud-project-anki-remastered.ew.r.appspot.com";
             const response = await fetch(`${API_URL}/cards`, {
                 method: 'POST',
                 headers: {

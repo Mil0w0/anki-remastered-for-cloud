@@ -1,4 +1,5 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {useEffect, useState} from "react";
 type CardDialogProps = {
     openDialog:boolean,
     setOpenDialog: Function,
@@ -12,6 +13,34 @@ export default function AnswerCardValidation({openDialog, setOpenDialog, userAns
         validateUserAnswer(isValid);
         setOpenDialog(false);
     }
+    const [validity, setValidity] = useState<boolean>(false);
+    async function handleValidity() {
+        const CLOUD_FUNC_URL = "https://http-triggered-card-comparison-1098142107823.europe-west1.run.app"
+        const response = await fetch(`${CLOUD_FUNC_URL}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({userAnswer: userAnswer, cardAnswer: cardAnswer}),
+        });
+
+        if (!response.ok) {
+            console.log("erreur");
+        }else{
+
+            const data : {isValid: boolean} = await response.json();
+            console.log(data);
+            const isValid = data.isValid;
+            validateUserAnswer(isValid);
+            setOpenDialog(false);
+        }
+
+    }
+
+    useEffect(() => {
+        handleValidity().then(() => setValidity(true)).catch(() => console.error("Error occured"));
+    }, [userAnswer])
+
     return (
         <Dialog
             open={openDialog}
@@ -29,7 +58,7 @@ export default function AnswerCardValidation({openDialog, setOpenDialog, userAns
                     The good answer : {cardAnswer}
                 </DialogContentText>
                 <DialogContentText id="alert-dialog-description">
-                    Decision : you answer is {cardAnswer === userAnswer ? "" : "not"} valid
+                    Decision : you answer is {validity ? "" : "not"} valid
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

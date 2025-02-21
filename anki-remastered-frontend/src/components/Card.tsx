@@ -18,6 +18,7 @@ type AnkiProps = {
     setOpen: Function,
     answerDate?: string,
 }
+//@ts-ignore
 export default function AnkiCard({question, id, answer, tag, category, cardIndex, totalCards, canAnswer, setCards, cards, setError, setOpen, answerDate}: AnkiProps){
 
     const [showAnswer, setShowAnswer] = useState(false);
@@ -30,7 +31,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
 
     async function updateCardCategory(isValid: boolean, answerDate: string) {
         try {
-            const API_URL = "http://localhost:3000";
+            const API_URL = "https://cloud-project-anki-remastered.ew.r.appspot.com";
             const response = await fetch(`${API_URL}/cards/${id}/answer`, {
                 method: 'PATCH',
                 headers: {
