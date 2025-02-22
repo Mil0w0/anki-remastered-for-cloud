@@ -20,6 +20,17 @@ cd anki-remastered-cloud-function
 `
 URL:  https://europe-west1-cloud-project-anki-remastered.cloudfunctions.net/anki-function-cloud
 
+#### Test
+curl -X POST https://europe-west1-cloud-project-anki-remastered.cloudfunctions.net/anki-function-cloud  \
+-H "Content-Type: application/json" \
+-d '{
+"userAnswer": "Developer",
+"cardAnswer": "developer"
+}'
+
+=> {"isValid":true}
+
+
 ### Backend
 cd anki-remastered-backend
 TODO
