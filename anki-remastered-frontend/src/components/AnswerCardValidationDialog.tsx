@@ -15,8 +15,8 @@ export default function AnswerCardValidation({openDialog, setOpenDialog, userAns
     }
     const [validity, setValidity] = useState<boolean>(false);
     async function handleValidity() {
-        const CLOUD_FUNC_URL = "https://http-triggered-card-comparison-1098142107823.europe-west1.run.app"
-        const response = await fetch(`${CLOUD_FUNC_URL}/`, {
+        const CLOUD_FUNC_URL = "https://europe-west1-cloud-project-anki-remastered.cloudfunctions.net"
+        const response = await fetch(`${CLOUD_FUNC_URL}/anki-function-cloud`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
