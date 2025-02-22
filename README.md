@@ -9,6 +9,7 @@ Pour lancer le frontend : [Readme frontend](https://github.com/Clarence1208/anki
 ### Frontend
 cd anki-remastered-frontend
 gcloud init (si pas déjà fait)
+npm run build
 `gcloud app deploy` (vérifier le nom du service !)
 
 URL: https://frontend-dot-cloud-project-anki-remastered.ew.r.appspot.com/

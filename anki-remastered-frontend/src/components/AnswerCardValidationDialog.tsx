@@ -1,46 +1,18 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
-import {useEffect, useState} from "react";
 type CardDialogProps = {
     openDialog:boolean,
     setOpenDialog: Function,
     userAnswer:string,
     cardAnswer:string,
     validateUserAnswer: Function,
+    validity: boolean
 }
-export default function AnswerCardValidation({openDialog, setOpenDialog, userAnswer, cardAnswer, validateUserAnswer}: CardDialogProps) {
+export default function AnswerCardValidation({openDialog, setOpenDialog, userAnswer, cardAnswer, validateUserAnswer, validity}: CardDialogProps) {
 
     function handleValidationAnswer(isValid: boolean) {
         validateUserAnswer(isValid);
         setOpenDialog(false);
     }
-    const [validity, setValidity] = useState<boolean>(false);
-    async function handleValidity() {
-        const CLOUD_FUNC_URL = "https://europe-west1-cloud-project-anki-remastered.cloudfunctions.net"
-        const response = await fetch(`${CLOUD_FUNC_URL}/anki-function-cloud`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({userAnswer: userAnswer, cardAnswer: cardAnswer}),
-        });
-
-        if (!response.ok) {
-            console.log("erreur");
-        }else{
-
-            const data : {isValid: boolean} = await response.json();
-            console.log(data);
-            const isValid = data.isValid;
-            validateUserAnswer(isValid);
-            setOpenDialog(false);
-        }
-
-    }
-
-    useEffect(() => {
-        handleValidity().then(() => setValidity(true)).catch(() => console.error("Error occured"));
-    }, [userAnswer])
-
     return (
         <Dialog
             open={openDialog}

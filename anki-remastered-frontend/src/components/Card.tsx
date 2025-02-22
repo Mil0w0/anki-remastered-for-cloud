@@ -24,6 +24,8 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
     const [showAnswer, setShowAnswer] = useState(false);
     const [userAnswer, setUserAnswer] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
+    const [validity, setValidity] = useState<boolean>(false);
+
 
     function handleUserAnswer(e: ChangeEvent<HTMLInputElement>){
         setUserAnswer(e.target.value);
@@ -49,8 +51,33 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
             setError('Failed to update the card' + error);
         }
     }
+    async function handleValidity() {
+        const CLOUD_FUNC_URL = "https://europe-west1-cloud-project-anki-remastered.cloudfunctions.net"
+        const response = await fetch(`${CLOUD_FUNC_URL}/anki-function-cloud`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({userAnswer: userAnswer, cardAnswer: answer}),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update the card ${response.statusText}`);
+        }else{
+            const data : {isValid: boolean} = await response.json();
+            console.log(data);
+            const isValid = data.isValid;
+            return isValid;
+        }
+
+    }
 
     function openAnswerValidationDialog() {
+        handleValidity().then((valid: boolean) => {
+            setValidity(valid);
+        }).catch((error: Error) => {
+            console.log(error);})
+
         setOpenDialog(true);
     }
 
@@ -90,7 +117,7 @@ export default function AnkiCard({question, id, answer, tag, category, cardIndex
             {!canAnswer && <Button size="small" onClick={toggleAnswer}>Reveal Answer</Button> }
         </CardActions>
 
-        <AnswerCardValidation openDialog={openDialog} setOpenDialog={setOpenDialog} cardAnswer={answer} userAnswer={userAnswer} validateUserAnswer={validateUserAnswer} />
+        <AnswerCardValidation openDialog={openDialog} setOpenDialog={setOpenDialog} cardAnswer={answer} userAnswer={userAnswer} validateUserAnswer={validateUserAnswer} validity={validity} />
 
     </Card>
     );

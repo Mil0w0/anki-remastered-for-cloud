@@ -15,7 +15,7 @@ export function QuizzOfTheDay() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
     //@ts-ignore
-    const [quizzDate, setQuizzDate] = useState(new Date());
+    const [quizzDate, setQuizzDate] = useState(new Date(new Date().getTime() + 72 * 60 * 60 * 1000));
 
     async function getQuizzOfTheDay() {
         const queryParams = "?date=" + quizzDate.toISOString(); // TEST TMRW: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString();
