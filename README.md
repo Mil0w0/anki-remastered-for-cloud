@@ -33,7 +33,13 @@ curl -X POST https://europe-west1-cloud-project-anki-remastered.cloudfunctions.n
 
 ### Backend
 cd anki-remastered-backend
-TODO
+`gcloud app deploy` 
+
+Pour les logs:
+`gcloud app logs tail -s default`
+
+URL:
+https://cloud-project-anki-remastered.ew.r.appspot.com/
 
 
 ## Authors
