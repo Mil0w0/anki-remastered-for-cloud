@@ -1,7 +1,7 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {v4 as uuidv4} from 'uuid';
 import {Card} from '../domain/card.entity';
-import {CardRepository} from '../domain/ports/card.repository';
+import {CARD_REPOSITORY, CardRepository} from '../domain/ports/card.repository';
 import {CreateCardDto} from '../domain/dto/createCard.dto';
 import {Category} from "../domain/category.enum";
 import {QuizzService} from "../../quizz/services/quizz.service";
@@ -11,7 +11,7 @@ import {LocalDateUtils} from "../../utils/local.date.utils";
 @Injectable()
 export class CardService {
     constructor(
-        @Inject('CardRepository') private cardRepository: CardRepository,
+        @Inject(CARD_REPOSITORY) private cardRepository: CardRepository,
         private readonly quizzValidationService: QuizzValidationService
     ) {}
 

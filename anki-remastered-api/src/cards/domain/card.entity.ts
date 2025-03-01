@@ -1,17 +1,39 @@
 import {Category} from "./category.enum";
+import {Column, Entity, PrimaryColumn} from 'typeorm';
 import {LocalDateUtils} from "../../utils/local.date.utils";
 
+@Entity()
 export class Card {
+    @PrimaryColumn()
+    id: string;
 
-    public lastResponseDate: Date | null = null;
+    @Column()
+    category: Category;
+
+    @Column('text')
+    question: string;
+
+    @Column('text')
+    answer: string;
+
+    @Column()
+    tag: string;
+
+    @Column({type: 'timestamp', nullable: true})
+    lastResponseDate: Date | null = null;
 
     constructor(
-        public id: string,
-        public category: Category,
-        public question: string,
-        public answer: string,
-        public tag: string
+        id: string,
+        category: Category,
+        question: string,
+        answer: string,
+        tag: string,
     ) {
+        this.id = id;
+        this.category = category;
+        this.question = question;
+        this.answer = answer;
+        this.tag = tag;
     }
 
     /**
